@@ -1,0 +1,10 @@
+# 1. Probability practice
+
+## Part. A
+
+## Part. B
+
+
+# 2. Wrangling the Billboard Top 100
+
+using [billboard.csv](./data/billboard.csv)
