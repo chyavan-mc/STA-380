@@ -1,10 +1,139 @@
 # 1. Probability practice
 
 ## Part. A
+Visitors to your website are asked to answer a single survey question before they get access to the content on the page. Among all of the users, there are two categories: Random Clicker (RC), and Truthful Clicker (TC). There are two possible answers to the survey: yes and no. Random clickers would click either one with equal probability. You are also giving the information that the expected fraction of random clickers is 0.3.  After a trial period, you get the following survey results: 65\% said Yes and 35\% said No.   What fraction of people who are truthful clickers answered yes?  Hint: use the rule of total probability.
+
+> Lets start with the mathematical representations of all the fractions we know, <br>
+> $P(Y) = 0.65 \rightarrow$ Marginal probability of a clicker saying Yes <br>
+> $P(N) = 0.35 \rightarrow$ Marginal probability of a clicker saying No <br>
+> $P(R_{c}) = 0.3 \rightarrow$ Probability of a clicker being a random clicker <br>
+> $P(T_{c}) = 0.7 \rightarrow$ Probability of a clicker being a truthful clicker <br>
+> 
+> To find the fraction of people truthful clickers who answered yes, we find the value of $P(Y|T_{c})$
+> 
+> We know that, <br>
+>   $P(Y) = P(Y|R_{c}) + P(Y|T_{c})$
+> 
+> Rearranging, <br>
+>   $P(Y|T_{c}) = P(Y) - P(Y|R_{c})$
+> 
+> If a random clicker clicking *Yes* or *No* is equally likely, then the probability (or fraction) of Random clickers, clicking yes > is (Fraction of users among the 0.3 random clickers, clicking *Yes*), <br>
+>   $P(Y|R_{c}) = 0.5*0.3 = 0.15$
+> 
+> Substituting in the rearranged equation, <br>
+>   $P(Y|T_{c}) = 0.65 - 0.15$ <br>
+>   $P(Y|T_{c}) = 0.5$
+>
+> Therefore, the fraction of clickers among truthful clickers who clicked yes would be **0.5**
 
 ## Part. B
+Imagine a medical test for a disease with the following two attributes:  
 
+- The sensitivity is about 0.993. That is, if someone has the disease, there is a probability of 0.993 that they will test positive.
+- The specificity is about 0.9999. This means that if someone doesn't have the disease, there is probability of 0.9999 that they will test negative.
+- In the general population, incidence of the disease is reasonably rare: about 0.0025% of all people have it (or 0.000025 as a decimal probability).
+
+Suppose someone tests positive. What is the probability that they have the disease?
+
+> Lets start with the mathematical representations of all the probabilities we know, <br>
+>   $P(T_{p}|D) = 0.993 \rightarrow$ Probability of testing positive given a person has the disease <br>
+>   $P(T_{n}|D_{c}) = 0.9999 \rightarrow$ Probability of testing negative given a person doesn't have the disease <br>
+>   $P(D) = 0.000025 \rightarrow$ Probability of a person having the disease <br>
+>   $P(D_{c}) = 1- P(D) = 0.999975$ \rightarrow Probability of a person not having the disease <br>
+> 
+> We'll find the probability of testing positive, given a person doesn't have the disease, i.e.
+>   $P(T_{p}|D_{c}) = 1 - P(T_{n}|D_{c}) = 1 - 0.9999 = 0.0001$
+> 
+> Probability of having the disease given that someone tested positive <br>
+>   $P(D|T_{p}) = \frac{P(T_{p}|D)*P(D)}{P(T_{p})}$ <br>
+>   $P(D|T_{p}) = \frac{P(T_{p}|D)*P(D)}{P(T_{p}|D)*P(D) + P(T_{p}|D_{c})*P(D_{c})}$ <br>
+>   $P(D|T_{p}) = \frac{0.993*0.000025}{0.993*0.000025 + 0.0001*0.999975}$ = 0.1989<br>
+>   $P(D|T_{p}) = 0.1989 \rightarrow 19.89\%$ <br>
+>
+> Therefore, the probability of having the disease given that someone tested positive is **0.1989 or 19.89%**. It has significantly increased from the marginal probability of having the disease which was **0.000025 or 0.0025%**
 
 # 2. Wrangling the Billboard Top 100
 
 using [billboard.csv](./data/billboard.csv)
+``` {r 2setup, include=FALSE}
+library(dplyr)
+library(tidyverse)
+
+options(dplyr.summarise.inform = FALSE)
+```
+
+```{r 2pre}
+billboard = read.csv("./data/billboard.csv")
+billboard = billboard[,c("performer", "song", "year", "week", "week_position")]
+# Considering the relevant columns as mentioned in the question
+head(billboard)
+```
+
+## Part. A
+
+Make a table of the top 10 most popular songs since 1958, as measured by the _total number of weeks that a song spent on the Billboard Top 100._  Note that these data end in week 22 of 2021, so the most popular songs of 2021 will not have up-to-the-minute data; please send our apologies to The Weeknd.    
+
+Your table should have __10 rows__ and __3 columns__: `performer`, `song`, and `count`, where `count` represents the number of weeks that song appeared in the Billboard Top 100.  Make sure the entries are sorted in descending order of the `count` variable, so that the more popular songs appear at the top of the table.  Give your table a short caption describing what is shown in the table.  
+
+(_Note_: you'll want to use both `performer` and `song` in any `group_by` operations, to account for the fact that multiple unique songs can share the same title.)  
+
+``` {r 2a, warnings=FALSE}
+top_songs_by_week = billboard %>% group_by(song, performer) %>% summarize(count = n())
+top10_songs_by_week = head(top_songs_by_week[order(-top_songs_by_week$count),], 10)
+
+knitr::kable(top10_songs_by_week,
+             caption = "The Top 10 Songs (Jul 1958 - Jun 2021) by the number of weeks on the Billboard")
+```
+
+## Part. B
+
+Is the "musical diversity" of the Billboard Top 100 changing over time?  Let's find out.  We'll measure the musical diversity of given year as _the number of unique songs that appeared in the Billboard Top 100 that year._  Make a line graph that plots this measure of musical diversity over the years.  The x axis should show the year, while the y axis should show the number of unique songs appearing at any position on the Billboard Top 100 chart in any week that year.  For this part, please filter the data set so that it excludes the years 1958 and 2021, since we do not have complete data on either of those years.   Give the figure an informative caption in which you explain what is shown in the figure and comment on any interesting trends you see.
+
+There are number of ways to accomplish the data wrangling here.  We offer you two hints on two possibilities:  
+
+1) You could use two distinct sets of data-wrangling steps.  The first set of steps would get you a table that counts the number of times that a given song appears on the Top 100 in a given year.  The second set of steps operate on the result of the first set of steps; it would count the number of unique songs that appeared on the Top 100 in each year, _irrespective of how many times_ it had appeared.
+2) You could use a single set of data-wrangling steps that combines the `length` and `unique` commands. 
+
+``` {r 2b, warnings=FALSE}
+musical_diversity = billboard[,c("performer", "song", "year")] 
+musical_diversity = musical_diversity %>% filter(!(year %in% c(2021, 1958)))
+musical_diversity = unique(musical_diversity)
+musical_diversity = musical_diversity %>% group_by(year) %>% summarize(unique=n())
+musical_diversity = musical_diversity[order(musical_diversity$year),]
+
+# plot(musical_diversity$year, musical_diversity$unique, type="l", col="red", xlab="Year", ylab="# of unique songs on the Billboard Top-100", main="Musical Diversity")
+
+ggplot(data=musical_diversity, aes(x=year, y=unique, group=1)) +
+  geom_line(color="red", size=1) +
+  ggtitle("Musical Diversity") +
+  xlab("Year") +
+  ylab("# of unique songs on the Billboard Top-100")
+```
+
+## Part. C
+
+Let's define a "ten-week hit" as a single song that appeared on the Billboard Top 100 for at least ten weeks.  There are 19 artists in U.S. musical history since 1958 who have had _at least 30 songs_ that were "ten-week hits."  Make a bar plot for these 19 artists, showing how many ten-week hits each one had in their musical career.   Give the plot an informative caption in which you explain what is shown.
+
+
+_Notes_:  
+
+1) You might find this easier to accomplish in two distinct sets of data wrangling steps.
+2) Make sure that the individuals names of the artists are readable in your plot, and that they're not all jumbled together.  If you find that your plot isn't readable with vertical bars, you can add a `coord_flip()` layer to your plot to make the bars (and labels) run horizontally instead.
+3) By default a bar plot will order the artists in alphabetical order.  This is acceptable to turn in.  But if you'd like to order them according to some other variable, you can use the `fct_reorder` function, described in [this blog post](https://datavizpyr.com/re-ordering-bars-in-barplot-in-r/).  This is optional.
+
+``` {r 2c}
+ten_week_hitters = top_songs_by_week %>%
+  filter(count >= 10) %>%
+  group_by(performer) %>%
+  summarize(count = n()) %>%
+  filter(count >= 30)
+
+ggplot(data=ten_week_hitters, aes(x=reorder(performer, +count), y=count)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  coord_flip()
+```
+
+
+# 3. Visual story telling part 1: Green Buildings
+
+using [greenbuildings.csv](./data/greenbuildings.csv)
