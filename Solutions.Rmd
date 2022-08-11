@@ -54,7 +54,7 @@ Suppose someone tests positive. What is the probability that they have the disea
 
 # 2. Wrangling the Billboard Top 100
 
-using [billboard.csv](./data/billboard.csv)
+using [billboard.csv](./Data/billboard.csv)
 ``` {r 2setup, include=FALSE}
 library(dplyr)
 library(tidyverse)
@@ -63,7 +63,7 @@ options(dplyr.summarise.inform = FALSE)
 ```
 
 ```{r 2pre}
-billboard = read.csv("./data/billboard.csv")
+billboard = read.csv("./Data/billboard.csv")
 billboard = billboard[,c("performer", "song", "year", "week", "week_position")]
 # Considering the relevant columns as mentioned in the question
 head(billboard)
@@ -130,13 +130,160 @@ ten_week_hitters = top_songs_by_week %>%
 
 ggplot(data=ten_week_hitters, aes(x=reorder(performer, +count), y=count)) +
   geom_bar(stat="identity", fill="steelblue") +
+  ylab("# of 10-week-hits") + xlab("Artist") +
   coord_flip()
 ```
 
 
 # 3. Visual story telling part 1: Green Buildings
 
-using [greenbuildings.csv](./data/greenbuildings.csv)
+using [greenbuildings.csv](./Data/greenbuildings.csv) <br>
+*\*use raw preview to view the R-code*
+
+``` {r 3, include=FALSE}
+library(dplyr)
+library(tidyverse)
+
+green_db = read.csv("./Data/greenbuildings.csv")
+
+green_buildings = green_db[green_db$green_rating == 1,]
+non_green_buildings = green_db[green_db$green_rating == 0,]
+```
+
+``` {r 3a, echo=FALSE}
+cat(dim(green_db[green_db$leasing_rate < 0.1, ])[1], "outliers were removed from the data")
+```
+160 is a significant number of outliers to be discarded with a justification of data cleaning. Let us also see how the outliers modified the median value of the rent
+``` {r 3b, echo=FALSE}
+cat(
+  "Median rent of all green buildings:", median(green_db[green_db$green_rating == 1, "Rent"]),
+  "\nMedian rent of all green buildings after removing the outliers:", median(green_db[green_db$green_rating == 1 & green_db$leasing_rate > 0.1, "Rent"])
+  )
+```
+The outlier removal does not seem to have affected the median rate at all, rendering the process completely redundant. Additionally, removing the outliers might have actually cost us a lot in terms of information loss. Let's see how
+``` {r 3c, echo=FALSE}
+obs_per_cluster = green_db %>% group_by(cluster) %>% summarise(count=n())
+removed_per_cluster = green_db[green_db$leasing_rate < 0.1, ] %>% group_by(cluster) %>% summarise(count=n())
+
+merged = merge(obs_per_cluster, removed_per_cluster, by="cluster", suffixes = c(".total",".removed"))
+merged$perc_removed = 100*merged$count.removed/merged$count.total
+merged = merged[order(-merged$perc_removed),]
+
+plot_merge = merged[merged$perc_removed >= 20, c("cluster", "perc_removed")]
+rownames(plot_merge) = NULL
+knitr::kable(plot_merge,
+             align = "ll",
+             col.names = c("cluster", "perc_removed"),
+             caption = "The Percentage of cluster rows lost because of the outlier removal (top 27)")
+
+cat("In these 27 clusters, at least 20% of their properties (rows) were removed when the outliers were discarded. From intuition, we may suppose that each cluster might have characteristic rent of its own. So discarding a significant proportion of each cluster is removing vital information. We can also see that the outlier removal removed ",
+      dim(green_db[green_db$leasing_rate < 0.1 & green_db$green_rating == 1, ])[1],
+     " of the green rated property.")
+
+```
+
+Let's see how the data is cluster-wise. Let us group the clusters and look at the increase in rent for that cluster for a green building, and then summarize it.
+
+``` {r 3d, echo=FALSE, warning=FALSE}
+non_green_medians = non_green_buildings %>% group_by(cluster) %>% summarize(median_rent = median(Rent))
+merged = merge(green_db, non_green_medians, by="cluster", suffixes=c(".all", ".non_green"))
+comparison = merged[merged$green_rating == 1, c("cluster", "Rent","median_rent")]
+comparison$difference = comparison$Rent - comparison$median_rent
+
+cat("Median increase in rent for a green property (among all cluster-wise increases): $", median(comparison$difference), sep=)
+
+ggplot(comparison, aes(x=difference)) + 
+  geom_histogram(binwidth=3, color="darkblue", fill="lightblue") +
+  geom_vline(xintercept = median(comparison$difference), linetype="dashed",color = "red", size=1) +
+  geom_text(aes(x=-3+median(comparison$difference), label="Median Rent Increase", y=35), colour="red", angle=90, text=element_text(size=11)) +
+  xlab("Rent difference for green buildings") + ylab("Number of clusers")
+most_sign_differences = data.frame(table(cut(comparison$difference, 30)))
+most_sign_differences = most_sign_differences[order(-most_sign_differences$Freq),]
+rownames(most_sign_differences) = NULL
+knitr::kable(
+  head(most_sign_differences, 3))
+```
+
+From the histogram, we can see that the top 3 most frequent buckets (range of rent increases) are as shown in the table above. Among the top-3, 2 are negative, implying the rents for green buildings are lower than the non-green buildings in some of the clusters. That's all aggregated data. Now let's see how the spread of the rent difference is among clusters.
+
+``` {r 3e, echo=FALSE, warning=FALSE}
+iqr = quantile(comparison$difference,probs=c(0.25,0.75))
+knitr::kable(iqr)
+```
+
+the mid-50% of the data is in the range of (-0.4125,6.3475) meaning we can expect our rent to increase by this amount (per sqaure feet) if we ignore all other factors that might effect the rent. What other factors might be having an effect on the rent?
+
+``` {r 3f, echo=FALSE, warning=FALSE, fig.width=8, fig.height=8}
+par(mfrow=c(2,2))
+plot(green_db$leasing_rate, green_db$Rent, ylab="Rent", xlab="Leasing Rate")
+plot(green_db$Electricity_Costs, green_db$Rent, ylab="Rent", xlab="Electricity cost")
+plot(green_db$cd_total_07, green_db$Rent, ylab="Rent", xlab="Cooling  Demand")
+plot(green_db$hd_total07, green_db$Rent, ylab="Rent", xlab="Heating  Demand")
+```
+
+We can see, although not clearly, that the rent varies with leasing rate, electricity cost, cooling demand, heating demand, etc. all of which depend on the location of the property. This information about our propery under consideration being on East Cesar Chavez, just across I-35 from downtown is never being considered in the analysis. Considering these variations might also give us a more *reliable* prediction of the rent difference.
+
+One more factor considered in the analysis was 100% or 90% occupancy from day-1 of the property being ready for occupancy. This is rarely the case. Let us assume the median rent difference of $3 per square fit per year. and let us consider the property being occupied 100% over a span of some years
+
+``` {r 3g, echo=FALSE}
+y3 = c(.33, .66, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+y5 = c(.2, .4, .6, .8, 1.0, 1.0, 1.0, 1.0)
+y8 = c(.125, .25, .375, .5, .625, .75, .875, 1.0)
+annual_income_full_occupancy = 250000*3
+
+year3 = c()
+year5 = c()
+year8 = c()
+
+for(i in 1:8){
+  year3 = c(year3, annual_income_full_occupancy*y3[i])
+  year5 = c(year5, annual_income_full_occupancy*y5[i])
+  year8 = c(year8, annual_income_full_occupancy*y8[i])
+}
+
+
+target_occupancy_100 = c(
+  round(3 + ((5000000-sum(year3[1:3]))/annual_income_full_occupancy), 2),
+  round(5 + ((5000000-sum(year5[1:5]))/annual_income_full_occupancy), 2),
+  round(8 + ((5000000-sum(year8[1:8]))/annual_income_full_occupancy), 2)
+)
+
+y3 = y3*0.75
+y5 = y3*0.75
+y8 = y3*0.75
+
+year3 = c()
+year5 = c()
+year8 = c()
+
+for(i in 1:8){
+  year3 = c(year3, annual_income_full_occupancy*y3[i])
+  year5 = c(year5, annual_income_full_occupancy*y5[i])
+  year8 = c(year8, annual_income_full_occupancy*y8[i])
+}
+
+
+target_occupancy_75 = c(
+  round(3 + ((5000000-sum(year3[1:3]))/(annual_income_full_occupancy*0.75)), 2),
+  round(5 + ((5000000-sum(year5[1:5]))/(annual_income_full_occupancy*0.75)), 2),
+  round(8 + ((5000000-sum(year8[1:8]))/(annual_income_full_occupancy*0.75)), 2)
+)
+
+df = data.frame(target_occupancy_100, target_occupancy_75)
+rownames(df) = c("Target occupancy reached by year 3", "Target occupancy reached by year 5", "Target occupancy reached by year 8")
+knitr::kable(df,
+             align = "ll",
+             caption = "The Number of years required to recuperate the premium for green certification")
+
+```
+
+With this analysis, 7.7 years is still the best case scenario of recuperating the premium spent on a green certification. For a more realistic scenario, we can see that the cost will be recuperated before making any profits after at least 10 years of the construction. This gives a more realistic picture by just considering the rent increase of the median cluster disregarding all other factors. We can still suggest the developer to go for a linear regression model to get a more accurate prediction of the returns. Additionally, the linear model would also give a sense the role a particular factor plays in the estimation of the returns.
+
+
+# 4. Visual story telling part 2: Capital Metro data
+
+using [capmetro_UT.csv](./Data/capmetro_UT.csv) <br>
+*\*use raw preview to view the R-code*
 
 
 
