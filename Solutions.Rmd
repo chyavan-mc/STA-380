@@ -137,3 +137,645 @@ ggplot(data=ten_week_hitters, aes(x=reorder(performer, +count), y=count)) +
 # 3. Visual story telling part 1: Green Buildings
 
 using [greenbuildings.csv](./data/greenbuildings.csv)
+
+
+
+
+
+# Portfolio Modeling
+
+For this question, we decided to do 3 different tests with different types of ETFs to understand the different gains and losses through bootstrapping. 
+
+We first used Oil and Gas commodity ETFs to understand how much we would potentially be gaining or losing if we were to invest in them. 
+
+```{r, include = FALSE}
+library(mosaic)
+library(quantmod)
+library(foreach)
+
+#### Now use a bootstrap approach
+#### With more stocks
+
+#Commodities
+
+#USO: https://etfdb.com/etf/USO/
+#UNG: https://etfdb.com/etf/UNG/
+#OILK: https://etfdb.com/etf/OILK/
+#GAZ: https://etfdb.com/etf/GAZ/
+#RJN: https://etfdb.com/etf/RJN/
+
+mystocks = c("USO", "UNG", "OILK", "GAZ", "RJN")
+myprices = getSymbols(mystocks, from = "2017-08-13")
+
+# A chunk of code for adjusting all stocks
+# creates a new object adding 'a' to the end
+# For example, WMT becomes WMTa, etc
+for(ticker in mystocks) {
+  expr = paste0(ticker, "a = adjustOHLC(", ticker, ")")
+  eval(parse(text=expr))
+}
+
+head(USOa)
+
+# Combine all the returns in a matrix
+all_returns = cbind( ClCl(USOa),
+                     ClCl(UNGa),
+                     ClCl(OILKa),
+                     ClCl(GAZa),
+                     ClCl(RJNa))
+```
+
+These are the stocks we used for this portfolio: 
+
+USO: United States Oil Fund LP
+
+UNG: United States Natural Gas Fund LP
+
+OILK: ProShares K-1 Free Crude Oil Strategy ETF
+
+GAZ: iPath Series B Bloomberg Natural Gas Subindex Total Return ETN
+
+RJN: Elements Rogers International Commodity Index-Energy Total Return ETN
+
+
+```{r, echo = FALSE}
+head(all_returns)
+all_returns = as.matrix(na.omit(all_returns))
+```
+
+From the coefficients we can see the difference in each stocks and how they differ from day to day. We started measuring from 5 years back till today. 
+
+We then made a pairs plot to see each ETF against each other
+
+```{r, echo = FALSE}
+# Compute the returns from the closing prices
+pairs(all_returns)
+```
+
+We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of the random day. 
+
+```{r, echo = FALSE}
+# Sample a random return from the empirical joint distribution
+# This simulates a random day
+return.today = resample(all_returns, 1, orig.ids=FALSE)
+
+# Update the value of your holdings
+# Assumes an equal allocation to each asset
+total_wealth = 100000
+my_weights = c(0.2,0.2,0.2, 0.2, 0.2)
+holdings = total_wealth*my_weights
+holdings = holdings*(1 + return.today)
+
+# Compute your new total wealth
+holdings
+total_wealth = sum(holdings)
+total_wealth
+```
+
+So as we can see on a random day we went from $100,000 in capital to the output.
+
+We then observed the change over a time period of two weeks. 
+
+```{r, echo = FALSE}
+# Now loop over two trading weeks
+# let's run the following block of code 5 or 6 times
+# to eyeball the variability in performance trajectories
+
+## begin block
+total_wealth = 100000
+weights = c(0.2, 0.2, 0.2, 0.2, 0.2)
+holdings = weights * total_wealth
+n_days = 20  # capital T in the notes
+wealthtracker = rep(0, n_days) # Set up a placeholder to track total wealth
+for(today in 1:n_days) {
+  return.today = resample(all_returns, 1, orig.ids=FALSE)  # sampling from R matrix in notes
+  holdings = holdings + holdings*return.today
+  total_wealth = sum(holdings)
+  wealthtracker[today] = total_wealth
+}
+total_wealth
+plot(wealthtracker, type='l')
+## end block
+```
+
+So we can see the change in our capital over the time of 20 days.
+
+So now we bootstrap this model.
+
+```{r, echo = FALSE}
+# Now simulate many different possible futures
+# just repeating the above block thousands of times
+initial_wealth = 100000
+sim1 = foreach(i=1:5000, .combine='rbind') %do% {
+  total_wealth = initial_wealth
+  weights = c(0.2, 0.2, 0.2, 0.2, 0.2)
+  holdings = weights * total_wealth
+  n_days = 20
+  wealthtracker = rep(0, n_days)
+  for(today in 1:n_days) {
+    return.today = resample(all_returns, 1, orig.ids=FALSE)
+    holdings = holdings + holdings*return.today
+    total_wealth = sum(holdings)
+    wealthtracker[today] = total_wealth
+  }
+  wealthtracker
+}
+
+# each row is a simulated trajectory
+# each column is a data
+head(sim1)
+hist(sim1[,n_days], 25)
+```
+
+So we can see the distribution of capital after bootstrapping. It is mostly normal.
+
+```{r, echo = FALSE}
+# Profit/loss
+mean(sim1[,n_days])
+mean(sim1[,n_days] - initial_wealth)
+hist(sim1[,n_days]- initial_wealth, breaks=30)
+
+# 5% value at risk:
+quantile(sim1[,n_days]- initial_wealth, prob=0.05)
+
+# note: this is  a negative number (a loss, e.g. -500), but we conventionally
+# express VaR as a positive number (e.g. 500)
+```
+
+So this is our ultimate gain/loss, which can vary from time to time. 
+
+
+Our next portfolio is emerging market equities, which can be important for people who are interested in investing in new markets which can be relatively risky.
+
+```{r, include = FALSE}
+library(mosaic)
+library(quantmod)
+library(foreach)
+
+#### Now use a bootstrap approach
+#### With more stocks
+
+#Commodities
+
+#VTO: https://etfdb.com/etf/VTO/
+#IEMG: https://etfdb.com/etf/IEMG/
+#GEM: https://etfdb.com/etf/GEM/
+#DEM: https://etfdb.com/etf/DEM/
+#PXH: https://etfdb.com/etf/PXH/
+
+mystocks = c("VTO", "IEMG", "GEM", "DEM", "PXH")
+myprices = getSymbols(mystocks, from = "2017-08-13")
+
+# A chunk of code for adjusting all stocks
+# creates a new object adding 'a' to the end
+# For example, WMT becomes WMTa, etc
+for(ticker in mystocks) {
+  expr = paste0(ticker, "a = adjustOHLC(", ticker, ")")
+  eval(parse(text=expr))
+}
+
+head(USOa)
+
+# Combine all the returns in a matrix
+all_returns = cbind( ClCl(VTOa),
+                     ClCl(IEMGa),
+                     ClCl(GEMa),
+                     ClCl(DEMa),
+                     ClCl(PXHa))
+```
+
+These are the stocks we used for this portfolio: 
+
+VTO: Vanguard FTSE Emerging Markets ETF
+
+IEMG: iShares Core MSCI Emerging Markets ETF
+
+GEM: Goldman Sachs ActiveBeta Emerging Markets Equity ETF
+
+DEM: WisdomTree Emerging Markets High Dividend Fund
+
+PXH: Invesco FTSE RAFI Emerging Markets ETF
+
+
+```{r, echo = FALSE}
+head(all_returns)
+all_returns = as.matrix(na.omit(all_returns))
+```
+
+From the coefficients we can see the difference in each stocks and how they differ from day to day. We started measuring from 5 years back till today. 
+
+We then made a pairs plot to see each ETF against each other
+
+```{r, echo = FALSE}
+# Compute the returns from the closing prices
+pairs(all_returns)
+```
+
+We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of the random day. 
+
+```{r, echo = FALSE}
+# Sample a random return from the empirical joint distribution
+# This simulates a random day
+return.today = resample(all_returns, 1, orig.ids=FALSE)
+
+# Update the value of your holdings
+# Assumes an equal allocation to each asset
+total_wealth = 100000
+my_weights = c(0.2,0.2,0.2, 0.2, 0.2)
+holdings = total_wealth*my_weights
+holdings = holdings*(1 + return.today)
+
+# Compute your new total wealth
+holdings
+total_wealth = sum(holdings)
+total_wealth
+```
+
+So as we can see on a random day we went from $100,000 in capital to output [1]. This amount varies from day to day.
+
+We then observed the change over a time period of two weeks. 
+
+```{r, echo = FALSE}
+# Now loop over two trading weeks
+# let's run the following block of code 5 or 6 times
+# to eyeball the variability in performance trajectories
+
+## begin block
+total_wealth = 100000
+weights = c(0.2, 0.2, 0.2, 0.2, 0.2)
+holdings = weights * total_wealth
+n_days = 20  # capital T in the notes
+wealthtracker = rep(0, n_days) # Set up a placeholder to track total wealth
+for(today in 1:n_days) {
+  return.today = resample(all_returns, 1, orig.ids=FALSE)  # sampling from R matrix in notes
+  holdings = holdings + holdings*return.today
+  total_wealth = sum(holdings)
+  wealthtracker[today] = total_wealth
+}
+total_wealth
+plot(wealthtracker, type='l')
+## end block
+```
+
+So we can see the change in our capital over the time of 20 days.
+
+So now we bootstrap this model.
+
+```{r, echo = FALSE}
+# Now simulate many different possible futures
+# just repeating the above block thousands of times
+initial_wealth = 100000
+sim1 = foreach(i=1:5000, .combine='rbind') %do% {
+  total_wealth = initial_wealth
+  weights = c(0.2, 0.2, 0.2, 0.2, 0.2)
+  holdings = weights * total_wealth
+  n_days = 20
+  wealthtracker = rep(0, n_days)
+  for(today in 1:n_days) {
+    return.today = resample(all_returns, 1, orig.ids=FALSE)
+    holdings = holdings + holdings*return.today
+    total_wealth = sum(holdings)
+    wealthtracker[today] = total_wealth
+  }
+  wealthtracker
+}
+
+# each row is a simulated trajectory
+# each column is a data
+head(sim1)
+hist(sim1[,n_days], 25)
+```
+
+So we can see the distribution of capital after bootstrapping. It is mostly normal. 
+
+```{r, echo = FALSE}
+# Profit/loss
+mean(sim1[,n_days])
+mean(sim1[,n_days] - initial_wealth)
+hist(sim1[,n_days]- initial_wealth, breaks=30)
+
+# 5% value at risk:
+quantile(sim1[,n_days]- initial_wealth, prob=0.05)
+
+# note: this is  a negative number (a loss, e.g. -500), but we conventionally
+# express VaR as a positive number (e.g. 500)
+```
+
+So our ultimate gain/loss would be output [1]. This could vary due to randomization in bootstrapping. 
+
+The last portfolio we used is with Health and Biotech Equities, which is slightly less common but still has a large capital. 
+
+```{r, include = FALSE}
+library(mosaic)
+library(quantmod)
+library(foreach)
+
+#### Now use a bootstrap approach
+#### With more stocks
+
+#Commodities
+
+#XHE: https://etfdb.com/etf/XHE/
+#PSCH: https://etfdb.com/etf/PSCH/
+#IHE: https://etfdb.com/etf/IHE/
+#PBE: https://etfdb.com/etf/PBE/
+#FHLC: https://etfdb.com/etf/FHLC/
+
+mystocks = c("XHE", "PSCH", "IHE", "PBE", "FHLC")
+myprices = getSymbols(mystocks, from = "2017-08-13")
+
+# A chunk of code for adjusting all stocks
+# creates a new object adding 'a' to the end
+# For example, WMT becomes WMTa, etc
+for(ticker in mystocks) {
+  expr = paste0(ticker, "a = adjustOHLC(", ticker, ")")
+  eval(parse(text=expr))
+}
+
+head(USOa)
+
+# Combine all the returns in a matrix
+all_returns = cbind( ClCl(XHEa),
+                     ClCl(PSCHa),
+                     ClCl(IHEa),
+                     ClCl(PBEa),
+                     ClCl(FHLCa))
+```
+
+These are the stocks we used for this portfolio: 
+
+XHE: SPDR S&P Health Care Equipment ETF
+
+PSCH: Invesco S&P SmallCap Health Care ETF
+
+IHE: IShares U.S. Pharmaceuticals ETF
+
+PBE: Invesco Dynamic Biotechnology & Genome ETF
+
+FHLC: Fidelity MSCI Health Care Index ETF
+
+
+```{r, echo = FALSE}
+head(all_returns)
+all_returns = as.matrix(na.omit(all_returns))
+```
+
+From the coefficients we can see the difference in each stocks and how they differ from day to day. We started measuring from 5 years back till today. 
+
+We then made a pairs plot to see each ETF against each other
+
+```{r, echo = FALSE}
+# Compute the returns from the closing prices
+pairs(all_returns)
+```
+
+We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of the random day. 
+
+```{r, echo = FALSE}
+# Sample a random return from the empirical joint distribution
+# This simulates a random day
+return.today = resample(all_returns, 1, orig.ids=FALSE)
+
+# Update the value of your holdings
+# Assumes an equal allocation to each asset
+total_wealth = 100000
+my_weights = c(0.2,0.2,0.2, 0.2, 0.2)
+holdings = total_wealth*my_weights
+holdings = holdings*(1 + return.today)
+
+# Compute your new total wealth
+holdings
+total_wealth = sum(holdings)
+total_wealth
+```
+
+So as we can see on a random day we went from $100,000 in capital to output[1]. 
+
+We then observed the change over a time period of two weeks. 
+
+```{r, echo = FALSE}
+# Now loop over two trading weeks
+# let's run the following block of code 5 or 6 times
+# to eyeball the variability in performance trajectories
+
+## begin block
+total_wealth = 100000
+weights = c(0.2, 0.2, 0.2, 0.2, 0.2)
+holdings = weights * total_wealth
+n_days = 20  # capital T in the notes
+wealthtracker = rep(0, n_days) # Set up a placeholder to track total wealth
+for(today in 1:n_days) {
+  return.today = resample(all_returns, 1, orig.ids=FALSE)  # sampling from R matrix in notes
+  holdings = holdings + holdings*return.today
+  total_wealth = sum(holdings)
+  wealthtracker[today] = total_wealth
+}
+total_wealth
+plot(wealthtracker, type='l')
+## end block
+```
+
+So we can see the change in our capital over the time of 20 days.
+
+So now we bootstrap this model.
+
+```{r, echo = FALSE}
+# Now simulate many different possible futures
+# just repeating the above block thousands of times
+initial_wealth = 100000
+sim1 = foreach(i=1:5000, .combine='rbind') %do% {
+  total_wealth = initial_wealth
+  weights = c(0.2, 0.2, 0.2, 0.2, 0.2)
+  holdings = weights * total_wealth
+  n_days = 20
+  wealthtracker = rep(0, n_days)
+  for(today in 1:n_days) {
+    return.today = resample(all_returns, 1, orig.ids=FALSE)
+    holdings = holdings + holdings*return.today
+    total_wealth = sum(holdings)
+    wealthtracker[today] = total_wealth
+  }
+  wealthtracker
+}
+
+# each row is a simulated trajectory
+# each column is a data
+head(sim1)
+hist(sim1[,n_days], 25)
+```
+
+So we can see the distribution of capital after bootstrapping. It is mostly normal. 
+
+```{r, echo = FALSE}
+# Profit/loss
+mean(sim1[,n_days])
+mean(sim1[,n_days] - initial_wealth)
+hist(sim1[,n_days]- initial_wealth, breaks=30)
+
+# 5% value at risk:
+quantile(sim1[,n_days]- initial_wealth, prob=0.05)
+
+# note: this is  a negative number (a loss, e.g. -500), but we conventionally
+# express VaR as a positive number (e.g. 500)
+```
+
+So our ultimate gain/loss would be output [1], however this could change due to randomization in bootstrapping.
+
+When we compare all three, we can see which portfolio is better to invest in, as it gains more capital or loses the least. 
+
+# Market Segmentation
+
+The social marketing data set consists of users and their different tweets categorized into 35 main topics. Our goal was to define a "market segment" using this data set. We initially took a look at the data and decided which type of analysis was to fit best to define the market segment. 
+
+Since there were likely to be groups of different types of tweets, we decided to take a look at hierarchical clustering, however this did not end with favorable results, as there are too many splits on the decision tree and whichever k we chose was leading to an uneven distribution. Even with a K++ cluster we ended up with very high numbers, and decided to move to the next type of analysis. 
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggcorrplot)
+
+social_marketing <- read.csv("C:/Users/tanvi/Downloads/social_marketing.csv", row.names = 1)
+
+social_marketing <- cbind(User = rownames(social_marketing), social_marketing)
+rownames(social_marketing) <- 1:nrow(social_marketing)
+
+social_results = social_marketing %>%
+  group_by(User) %>% 
+  select(-User) %>%
+  summarize_all(mean) %>%
+  column_to_rownames(var="User")
+```
+
+We then attempted PCA to understand through which factors leads in the most variance of the data set. This split could potentially be defined as the market segment, so we decided to take a look into that. 
+
+We ran a quick few plots to see the relationship between the User and various categories. In the following graphs we can see the relationship between chatter tweets by the user and travel tweets by the user respectively.
+
+```{r, echo = FALSE}
+ggplot(rownames_to_column(social_results, "User")) + 
+  geom_col(aes(x=reorder(User, -chatter), y = chatter)) + 
+  coord_flip()
+
+ggplot(rownames_to_column(social_results, "User")) + 
+  geom_col(aes(x=reorder(User, -travel), y = travel)) + 
+  coord_flip()
+```
+
+We can see that there is some sort of relationship, so we proceeded with PCA.
+
+We took a more general look at the correlation between each variable in the following graph.
+
+```{r, echo = FALSE}
+# a look at the correlation matrix
+#cor(social_results)
+
+# looks a mess -- reorder the variables by hierarchical clustering
+ggcorrplot::ggcorrplot(cor(social_results), hc.order = TRUE)
+```
+
+Looking through the correlation plot, we can see some variables that have a fairly strong correlation with each other.
+
+Next we took a look at the distribution of variance among the data set. This will then split our PCs so we can observe them individually. 
+
+```{r, echo = FALSE}
+# Now look at PCA of the (average) survey responses.  
+PCApilot = prcomp(social_results, scale=TRUE)
+
+## variance plot
+plot(PCApilot)
+summary(PCApilot)
+```
+
+We can see that around PC16 gives us around 75% of the cumulative proportion, which is around 1/2 of the PCs. So we decided to take a look at a few.
+
+The following table shows the first 10 PCs. We decided to take a look at the first three to see if we can draw a conclusion.
+
+```{r, echo = FALSE}
+# first few pcs
+# try interpreting the loadings
+# the question to ask is: "which variables does this load heavily on (positive and negatively)?"
+round(PCApilot$rotation[,1:10],2) 
+
+# create a tidy summary of the loadings
+loadings_summary = PCApilot$rotation %>%
+  as.data.frame() %>%
+  rownames_to_column('Question')
+```
+
+```{r, echo = FALSE}
+# not sure yet
+loadings_summary %>%
+  select(Question, PC1) %>%
+  arrange(desc(PC1))
+```
+
+After looking at PC1, we did not find any obvious meaning of the vectors, meaning that it is likely noise, so we proceeded to the next PC.
+
+```{r, echo = FALSE}
+#  this looks like influencer tweets vs serious tweets
+loadings_summary %>%
+  select(Question, PC2) %>%
+  arrange(desc(PC2))
+```
+
+Looking at the categories for the tweets and how they are arranged, we can see that there is a separation between recreational tweets such as cooking, shopping, fashion, and serious tweets such as politics and news.
+
+Now lets look at PC3.
+
+```{r, echo = FALSE}
+loadings_summary %>%
+  select(Question, PC3) %>%
+  arrange(desc(PC3))
+```
+
+PC3 looks similar to PC2, except that some of the variables have different vectors. We can conclude that this is also similar to recreational or influencer tweets vs serious tweets.
+
+We then made some plots using the PCs that worked. 
+
+```{r, include = FALSE}
+# Let's make some plots of the shows themselves in 
+# PC space, i.e. the space of summary variables we've created
+
+social_marketing <- read.csv("C:/Users/tanvi/Downloads/social_marketing.csv", row.names = 1)
+
+
+social_marketing = merge(social_marketing, PCApilot$x[,1:3], by="row.names")
+social_marketing = rename(social_marketing, social_marketing = Row.names)
+```
+
+
+```{r, echo = FALSE}
+
+# let's plot in PC1 space
+# We might feel good calling PC1 the "quality drama" PC
+ggplot(social_marketing) + 
+  geom_col(aes(x=reorder(social_marketing, PC2), y=PC2)) + 
+  coord_flip()
+
+```
+
+```{r, echo = FALSE}
+# looks like a "lighthearted vs serious" PC
+ggplot(social_marketing) + 
+  geom_col(aes(x=reorder(social_marketing, PC3), y=PC3)) + 
+  coord_flip()
+```
+
+Both of these graphs look similar but have a distinct distribution
+
+```{r, echo = FALSE}
+# principal component regression: predicted engagement
+lm1 = lm(travel ~ PC1 + PC2 + PC3, data=social_marketing)
+summary(lm1)
+
+# gross ratings points
+lm2 = lm(college_uni ~ PC1 + PC2 + PC3, data=social_marketing)
+summary(lm2)
+
+# Conclusion: we can predict engagement and ratings
+# with PCA summaries of the pilot survey.
+# probably too much variance to regress on all survey questions!
+# since the sample size isn't too large here.
+plot(travel ~ fitted(lm1), data=social_marketing)
+plot(college_uni ~ fitted(lm2), data=social_marketing)
+```
+After plotting linear models with all 3 PCs, we can see that the main difference in tweets is recreational vs serious. We can use this to define our market segment. In this dataset, the market is seperated by the types of tweets that are recreational and serious. It shows the main differences in tweets by users. 
