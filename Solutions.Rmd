@@ -735,7 +735,7 @@ We then made some plots using the PCs that worked.
 # Let's make some plots of the shows themselves in 
 # PC space, i.e. the space of summary variables we've created
 
-social_marketing <- read.csv("C:/Users/tanvi/Downloads/social_marketing.csv", row.names = 1)
+social_marketing <- read.csv("./data/social_marketing.csv", row.names = 1)
 
 
 social_marketing = merge(social_marketing, PCApilot$x[,1:3], by="row.names")
@@ -778,4 +778,4 @@ summary(lm2)
 plot(travel ~ fitted(lm1), data=social_marketing)
 plot(college_uni ~ fitted(lm2), data=social_marketing)
 ```
-After plotting linear models with all 3 PCs, we can see that the main difference in tweets is recreational vs serious. We can use this to define our market segment. In this dataset, the market is seperated by the types of tweets that are recreational and serious. It shows the main differences in tweets by users. 
+After plotting linear models with all 3 PCs, we can see that the main difference in tweets is recreational vs serious. We can use this to define our market segment. In this dataset, the market is separated by the types of tweets that are recreational and serious. It shows the main differences in tweets by users. 
