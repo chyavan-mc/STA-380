@@ -355,7 +355,7 @@ to view the R-code*
 
 # 5. Portfolio Modeling
 
-For this question, we decided to do 3 different tests with different
+For this question, we decided to do three different tests with different
 types of ETFs to understand the different gains and losses through
 bootstrapping.
 
@@ -383,29 +383,29 @@ ETN
     ## 2017-08-18  0.036382576 -0.00610687  0.035049254  0.024885396  0.030973451
     ## 2017-08-21 -0.026078259  0.01996920 -0.025396847  0.000000000 -0.021459227
 
-From the coefficients we can see the difference in each stocks and how
+From the coefficients, we can see the difference in each stock and how
 they differ from day to day. We started measuring from 5 years back till
 today.
 
-We then made a pairs plot to see each ETF against each other
+We then made a pairs plot to see each ETF against each other.
 
 ![](Solutions_files/figure-markdown_github/5c-1.png)
 
 We then simulate a random day to where we distribute each ETF to our
 $100K capital equally and then find the sum to compute our new total
-wealth at the end of the random day.
+wealth at the end of a random day.
 
     ##            ClCl.USOa ClCl.UNGa ClCl.OILKa ClCl.GAZa ClCl.RJNa
-    ## 2017-12-12  19724.14  19280.58   19782.61     20000  19701.49
+    ## 2018-11-15  20050.21  16174.97   20075.19  16850.84  19230.77
 
-    ## [1] 98488.81
+    ## [1] 92381.98
 
 So as we can see on a random day we went from $100,000 in capital to the
 output.
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 104362.5
+    ## [1] 98981.17
 
 ![](Solutions_files/figure-markdown_github/5e-1.png)
 
@@ -414,40 +414,40 @@ So we can see the change in our capital over the time of 20 days.
 So now we bootstrap this model.
 
     ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
-    ## result.1 102469.98 103368.15 102653.90 104502.91 104937.74 105559.07 104267.33
-    ## result.2 104705.83 105205.78 109196.14 109337.29 105130.90 103659.16 101810.85
-    ## result.3  98421.39  98383.29  99241.16  99416.26  97260.96  94866.58  94167.55
-    ## result.4  98912.13  97740.04  97482.40  95710.80  95517.38  96389.90  97151.09
-    ## result.5  97117.62  98076.77  97440.63  95552.85  95280.05  95565.52  97507.20
-    ## result.6  96386.46  97220.82  96244.47  95542.97  97131.36  95588.56  96719.20
+    ## result.1 100965.83  95880.49  95858.17  98427.27  97535.74  99575.10  99944.61
+    ## result.2 100999.03 100316.12 100594.88 100003.80  97608.06  97844.83  99688.65
+    ## result.3  71308.09  72330.12  74799.18  76475.09  75791.27  75555.26  77430.97
+    ## result.4  99584.67  97918.17  99440.63  97387.79  99116.30  98730.17  99276.96
+    ## result.5 105308.23 103189.77 100858.58 101927.57 102457.20 104900.24 106141.03
+    ## result.6 101747.38 102728.74 102913.23 103067.23 105205.65 105689.44 106710.88
     ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1 105094.84 106367.05 107583.95 106549.04 108791.67  93396.79  94364.00
-    ## result.2  96907.94  97419.25  96923.45  97322.77 100301.91  99988.42 100599.58
-    ## result.3  92438.95  91358.37  90293.32  91040.76  87461.79  86882.47  86340.94
-    ## result.4  96797.92  99602.80  99761.97 101203.88  99610.91 102471.93 101604.05
-    ## result.5  95576.76  94811.50  96814.14  97072.55  98410.16  97794.84  98310.89
-    ## result.6  96936.16  96109.55  97457.03  97247.65  98047.32  97980.97  99172.77
+    ## result.1  97957.59  94118.30  96174.78  94048.55  96066.04  94240.06  95064.17
+    ## result.2  98401.64 100180.97  99560.56 100839.34 101917.75 100212.10  99464.40
+    ## result.3  76276.70  75575.89  76284.24  77073.80  76704.64  73199.90  73837.39
+    ## result.4 101057.37 100035.98 101782.30 103183.13 102230.71 106098.71 108386.11
+    ## result.5 103153.93 104939.49 103840.70 103448.66 104230.65 105205.07 105022.88
+    ## result.6 106829.09 105047.52 105036.06 103329.08 103184.10 100854.69 101602.19
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1  94527.60  94380.35  93739.43  94052.72  94794.73  93989.21
-    ## result.2 100381.34 102865.50 103555.30 103561.89 104965.94 109203.31
-    ## result.3  87421.29  87352.48  85794.53  84694.54  83385.50  79819.47
-    ## result.4 103172.86 105324.57 101257.95 102019.96 101186.04 101001.59
-    ## result.5  96313.98  96849.34  95223.80  96729.56  96065.65  95209.86
-    ## result.6  99170.96  98160.80  99034.08  99873.40 105127.35 106516.79
+    ## result.1  95349.17  99361.42  98820.01  97753.82  98239.54  98829.28
+    ## result.2 101116.24 101580.93 100862.11 108033.45 113069.02 114095.38
+    ## result.3  75137.33  75163.91  73592.04  72160.55  72922.39  72757.59
+    ## result.4 105849.69 105947.93 106268.69 102996.34 102985.40 102932.65
+    ## result.5 105169.33 103640.21 102292.10  99570.22 100500.45 102248.21
+    ## result.6 103081.87 109687.66 109673.73 110071.37 109290.31 108759.12
 
 ![](Solutions_files/figure-markdown_github/5f-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100418.2
+    ## [1] 100315.1
 
-    ## [1] 418.244
+    ## [1] 315.0719
 
 ![](Solutions_files/figure-markdown_github/5g-1.png)
 
     ##        5% 
-    ## -17121.96
+    ## -17375.57
 
 So this is our ultimate gain/loss, which can vary from time to time.
 
@@ -475,7 +475,7 @@ PXH: Invesco FTSE RAFI Emerging Markets ETF
     ## 2017-08-18 -0.002840909  0.0080506424  0.009779951  0.0078273719  0.0076518412
     ## 2017-08-21 -0.002849003  0.0032325157  0.002118644  0.0051776180  0.0047460845
 
-From the coefficients we can see the difference in each stocks and how
+From the coefficients, we can see the difference in each stock and how
 they differ from day to day. We started measuring from 5 years back till
 today.
 
@@ -483,21 +483,21 @@ We then made a pairs plot to see each ETF against each other
 
 ![](Solutions_files/figure-markdown_github/5j-1.png)
 
-We then simulate a random day to where we distribute each ETF to our
-$100K capital equally and then find the sum to compute our new total
-wealth at the end of the random day.
+We then simulate a random day where we distribute each ETF to our $100K
+capital equally and then find the sum to compute our new total wealth at
+the end of a random day.
 
     ##            ClCl.VTOa ClCl.IEMGa ClCl.GEMa ClCl.DEMa ClCl.PXHa
-    ## 2021-06-22  20067.72   19924.44  19955.63  20064.93  20017.09
+    ## 2018-01-30  19930.72   19737.82  19696.42  19717.63  19783.13
 
-    ## [1] 100029.8
+    ## [1] 98865.72
 
 So as we can see on a random day we went from $100,000 in capital to
 output \[1\]. This amount varies from day to day.
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 103236.1
+    ## [1] 97120.64
 
 ![](Solutions_files/figure-markdown_github/5l-1.png)
 
@@ -505,41 +505,41 @@ So we can see the change in our capital over the time of 20 days.
 
 So now we bootstrap this model.
 
-    ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
-    ## result.1  99977.05  99318.68 100315.52  98636.66 101109.30 101135.28 101326.98
-    ## result.2 100605.30  98881.37 100438.02 100967.11 102451.47 103314.93 104080.15
-    ## result.3  98819.15  99179.23  98474.85  98753.89  99887.86 101181.87  99787.30
-    ## result.4  99594.33 101955.56 101450.04 100556.11  99834.30 101143.01 101829.01
-    ## result.5  98766.43 100071.82  99432.92  99545.59  99372.25  98920.71  99496.24
-    ## result.6 101471.94 102025.76 101207.31 101899.96 101815.78 102795.75 103500.42
-    ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1 100920.14 100352.90  99780.92 100515.33 100207.82 100158.87 100160.79
-    ## result.2 103954.40 104426.17 102011.10 100437.16 101488.54 101593.11 101710.90
-    ## result.3  97799.29  98337.27  98586.04  98627.43  99273.92  96582.25  89780.85
-    ## result.4 101593.00 102150.37 102662.88 101642.49 100536.96 101145.35 101412.13
-    ## result.5  99939.87  99458.68  98945.32  99685.96 100254.88 100588.18 101357.23
-    ## result.6 103707.28 105702.26 106410.82 108542.87 108809.57 109587.08 108495.07
+    ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]     [,7]
+    ## result.1 100879.74 100302.43 102114.88 102175.57 102347.72 101852.97 101090.1
+    ## result.2  99621.20  98511.37  96428.64  99605.77 100010.05 100338.81 102165.8
+    ## result.3 100838.28 100729.58  99597.36  99423.16  98996.85 100441.49 100325.7
+    ## result.4  98640.46  98738.57 100806.60 100751.71 101258.87 101715.70 102940.3
+    ## result.5 101110.57 101729.31 100824.33 100899.70 100891.01 100393.33 100042.4
+    ## result.6 100283.16  99864.86 100835.25  99505.46  99394.33  99747.64 100410.7
+    ##              [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
+    ## result.1 101653.2 100155.37 100044.03 100874.09  99294.21  99582.28  99831.87
+    ## result.2 103015.0 103483.41 103384.54 102785.62 102484.41 103366.09 103708.26
+    ## result.3 101012.1  99463.79  97737.14  99381.10  99930.08 100751.26  99013.74
+    ## result.4 102637.6 102625.20 104804.70 109607.04 110486.16 111760.18 110405.71
+    ## result.5 100566.4 102182.28 103108.34 103649.03 103212.87 102928.09 104275.78
+    ## result.6 100090.7 100778.37 100277.94  99801.74 100616.31 100919.21 100657.82
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1  99312.62  99101.53  95691.63  95447.32  94586.22  94744.46
-    ## result.2 102889.43  95451.15  93991.95  93805.16  93191.59  93050.73
-    ## result.3  88687.50  88497.98  87032.65  87543.79  87292.43  83406.98
-    ## result.4 102166.14 102130.19 103354.05 103468.96 103279.31 102731.90
-    ## result.5 101906.26 101345.96 100537.40 101330.41 102431.41 101198.22
-    ## result.6 108367.04 108321.96 108734.34 109245.88 108624.08 108850.66
+    ## result.1  99311.63  99849.15  99298.09  98730.38  98770.87  98477.92
+    ## result.2 106032.45 107622.89 107630.67 107392.24 106927.99 109019.82
+    ## result.3  98765.86  97738.20  97309.31 101209.38 101352.83 101454.06
+    ## result.4 112180.00 111613.13 111916.02 112310.38 111854.71 111112.13
+    ## result.5 103446.82 102711.02 103621.66 104388.71 104879.89 105003.28
+    ## result.6 102082.40 102957.47 103392.33 104385.63 103416.95 103809.48
 
 ![](Solutions_files/figure-markdown_github/5m-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100720.5
+    ## [1] 100620.3
 
-    ## [1] 720.502
+    ## [1] 620.2815
 
 ![](Solutions_files/figure-markdown_github/5n-1.png)
 
     ##        5% 
-    ## -7593.621
+    ## -8268.217
 
 So our ultimate gain/loss would be output \[1\]. This could vary due to
 randomization in bootstrapping.
@@ -567,29 +567,29 @@ FHLC: Fidelity MSCI Health Care Index ETF
     ## 2017-08-18  0.0006649102  0.0015397134 -0.003377009 -0.005711819 -0.0034509426
     ## 2017-08-21 -0.0004983887  0.0023652318 -0.001219795  0.001104795  0.0034628928
 
-From the coefficients we can see the difference in each stocks and how
+From the coefficients, we can see the difference in each stock and how
 they differ from day to day. We started measuring from 5 years back till
 today.
 
-We then made a pairs plot to see each ETF against each other
+We then made a pairs plot to see each ETF against each other.
 
 ![](Solutions_files/figure-markdown_github/5q-1.png)
 
-We then simulate a random day to where we distribute each ETF to our
-$100K capital equally and then find the sum to compute our new total
-wealth at the end of the random day.
+We then simulate a random day where we distribute each ETF to our $100K
+capital equally and then find the sum to compute our new total wealth at
+the end of a random day.
 
     ##            ClCl.XHEa ClCl.PSCHa ClCl.IHEa ClCl.PBEa ClCl.FHLCa
-    ## 2020-07-16  19673.97   19674.92  19906.42  19689.74   19919.53
+    ## 2019-09-18  19895.91   19813.46  19958.15  19841.49   19981.94
 
-    ## [1] 98864.58
+    ## [1] 99490.95
 
 So as we can see on a random day we went from $100,000 in capital to
 output\[1\].
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 106238.8
+    ## [1] 103132.6
 
 ![](Solutions_files/figure-markdown_github/5s-1.png)
 
@@ -597,43 +597,43 @@ So we can see the change in our capital over the time of 20 days.
 
 So now we bootstrap this model.
 
-    ##               [,1]      [,2]      [,3]      [,4]     [,5]      [,6]     [,7]
-    ## result.1  98360.40  97633.05  96491.65  95882.31  97529.0  98265.80 103396.7
-    ## result.2 100214.36 100762.62 100269.90  99603.19 100150.0  99179.34 100188.7
-    ## result.3  99769.57 107678.53 106767.87 106755.48 107206.6 108779.06 110075.7
-    ## result.4 101175.62 102119.79 101582.80 102891.14 104622.8 106294.54 108462.0
-    ## result.5 100316.66 101476.60 101244.40 104409.62 101753.8 102469.10 103537.1
-    ## result.6 102222.24 101616.92 103315.03 102663.98 103100.1 102950.39 103137.9
-    ##               [,8]      [,9]     [,10]     [,11]    [,12]     [,13]     [,14]
-    ## result.1 103714.88 103183.29 102787.18 102690.32 102373.4 102220.89 101651.57
-    ## result.2  99466.65  99476.26  99838.56  99757.89 100182.1  98300.71  98406.36
-    ## result.3 110145.08 110939.26 108289.52 109655.42 110063.3 110444.53 106316.05
-    ## result.4 108183.21 107911.45 105868.97 107071.28 105757.8 108302.81 107462.52
-    ## result.5 104300.70 105020.60 103936.78 105423.87 106788.3 106995.84 106532.99
-    ## result.6 104006.53 104556.31 104264.79 104172.35 102936.3 101716.90 101923.55
-    ##              [,15]    [,16]    [,17]    [,18]     [,19]    [,20]
-    ## result.1  99052.29 101133.5 101761.5 101567.0 102312.98 102611.1
-    ## result.2 100271.47 100043.2 100856.8 102176.4 102455.80 102388.5
-    ## result.3 104098.69 105453.8 103312.8 104725.1 104835.15 105334.5
-    ## result.4 105951.92 105405.4 106862.6 107477.5 107873.91 106902.0
-    ## result.5 109641.65 108919.9 107512.8 108768.4 108368.27 109321.2
-    ## result.6 101701.42 102295.4 101970.7 101225.9  99296.22  98374.8
+    ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
+    ## result.1 101170.90 102376.32 101267.84 101232.69 100463.49  98817.79  98501.97
+    ## result.2 100754.33 100529.95 101454.61 101004.24 100560.80 102237.59 102954.21
+    ## result.3  98769.14  98787.17  98713.86 100007.76 100537.62  99382.25  98973.98
+    ## result.4 100036.41  99133.16  98946.84  99141.25 100478.24  99712.14 100154.99
+    ## result.5 100650.15 100832.65 100271.79 100084.33  99915.32 100330.08  99071.88
+    ## result.6  99733.52 101528.92 100903.79 100059.15 100550.14  98619.44  98276.34
+    ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
+    ## result.1  98740.87  99726.21 100739.46  97160.60  97085.67  97087.63  96437.00
+    ## result.2 103110.75 103422.53 103113.02 103232.60 104125.73 102201.03 102504.79
+    ## result.3  96967.37  94138.43  95245.00  95501.88  96392.53  94970.99  96929.23
+    ## result.4 101368.26  99802.41  99996.45 100624.05  99592.84 100447.22 100855.97
+    ## result.5  96730.02  94232.51  95733.61  98479.14  98791.74  99093.13 100242.70
+    ## result.6  96428.04  97346.66  97793.29  96676.89  96278.15  96293.14  93890.13
+    ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
+    ## result.1  96223.17  97235.42  96410.03  97487.84  98153.43  98784.70
+    ## result.2 103375.44 102195.68 101477.57 102345.73 110425.33 110988.62
+    ## result.3  96307.23  98244.74  99819.46 102805.25 102309.38 100243.97
+    ## result.4 101181.99 103374.29 104374.73 105257.36 104839.10 104120.64
+    ## result.5 101046.75  99803.87 102605.93 103518.72 104675.44 105194.99
+    ## result.6  94079.01  91718.11  92724.94  91619.47  93088.55  93315.85
 
 ![](Solutions_files/figure-markdown_github/5t-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 101066.6
+    ## [1] 100995.3
 
-    ## [1] 1066.615
+    ## [1] 995.2554
 
 ![](Solutions_files/figure-markdown_github/5u-1.png)
 
     ##        5% 
-    ## -8853.299
+    ## -8668.667
 
-So our ultimate gain/loss would be output \[1\], however this could
+So our ultimate gain/loss would be output \[1\]. However, this could
 change due to randomization in bootstrapping.
 
 When we compare all three, we can see which portfolio is better to
@@ -781,19 +781,20 @@ plot(cumsum(pve), xlab = "Principal Component", ylab = "Cumulative Proportion of
 
 ![](Solutions_files/figure-markdown_github/PCA_Analysis-4.png)
 
-PCA allowed us to reduce the dimensionality of this very large dataset.
-This gave us a deeper insight on the key variables in the dataset. This
-unsupervised learning tool is valuable, as the information generated
-from this model can be applied in supervised learning methods. From this
-model, 12 different principal components were generated. The graph shows
-that PC1 and PC2 explain a greater proportion of variance in the dataset
-than the other principal components do. This is the general trend, so it
-was expected these principal components would capture the most variance.
-In PC1, the variables with the greatest magnitude were total sulfur
-dioxide, free sulfur dioxide, and volatile acidity. For PC2 alcohol had
-the greatest magnitude. This gives insight on where the highest variance
-exists in the dataset, as the first PC attempts to account for the
-highest variance and then the second is the next highest, and so forth.
+PCA allowed us to reduce the dimensionality of this massive dataset.
+This gave us a deeper insight into the key variables in the dataset.
+This unsupervised learning tool is valuable, as the information
+generated from this model can be applied in supervised learning methods.
+From this model, 12 different principal components were generated. The
+graph shows that PC1 and PC2 explain a greater proportion of variance in
+the dataset than the other principal components do. This is the general
+trend, so it was expected these principal components would capture the
+most variance. In PC1, the variables with the highest magnitude were
+total sulfur dioxide, free sulfur dioxide, and volatile acidity. For PC2
+alcohol had the highest magnitude. This gives insight into where the
+highest variance exists in the dataset, as the first PC attempts to
+account for the highest variance, and then the second is the next
+highest, and so forth.
 
 ``` r
 wine = read.csv("./Data/wine.csv")
@@ -1040,25 +1041,28 @@ clusplot(mydata, fit$cluster, color=TRUE, shade=TRUE,
 
 For this dataset, K Means Clustering was chosen over PCA to analyze
 different wines and their 11 associated chemical properties. K Means
-Clustering made more sense for this probloem as it will identify groups
-not explicity labeled in the data, which is exactly what we were
+Clustering made more sense for this problem as it will identify groups
+not explicitly labeled in the data, which is exactly what we were
 testing. The goal of this unsupervised learning model was to see if
 these wines can be clustered based on similar properties. The ‘color’
-column was removed, because we were trying to create a model that would
-correctly classify the wines as red or white. #The K Means Clusering
-model did correctly cluster some of the red and white wines, but it was
-not 100% accurate. To test how well our K Means Clustering model was at
-classifying red vs white wines, we added back the color column and
-studied if all the red wines and white wines were assigned the same
-cluster. It appeared that the red wines were correctly classified, but
-several of the white wines were not. Overall, this model was able to
-distinguish between red and white wine but did not have a perfect
-accuracy. #Finally, we tested if the K Means Clustering model was able
-to correctly distinguish between high and low quality wines. The study
-this, the clusters column and the quality columns were compared and
-there did not appear to be any clustering based on quality. For example,
-a wine rated as a 3 was clustered in the same cluster as wines getting a
-rating of 6+. Further tests could be run to study why this was occuring.
+column was removed because we were trying to create a model that would
+correctly cluster the wines as red or white.
+
+The K Means Clustering model did correctly cluster some of the red and
+white wines, but it was not 100% accurate. To test how well our K Means
+Clustering model was at classifying red vs white wines, we added back
+the color column and studied if all the red wines and white wines were
+assigned the same cluster. It appeared that the red wines were correctly
+classified, but several of the white wines were not. Overall, this model
+was able to distinguish between red and white wine but did not have
+perfect accuracy.
+
+Finally, we tested if the K Means Clustering model was able to correctly
+distinguish between high and low-quality wines. To study this, the
+clusters column and the quality columns were compared and there did not
+appear to be any clustering based on quality. For example, a wine rated
+as a 3 was clustered in the same cluster as wines getting a rating of
+6+. Further tests could be run to study why this was occurring.
 
 # 7. Market Segmentation
 
@@ -1362,9 +1366,9 @@ differences in tweets by users.
 
 # 8. The Reuters corpus
 
-## Objective: To build two separate models for predicting the author of an article on the basis of that article’s textual content.The first part of this exercise derives a lot of its content from NaiveBayes.R which was discussed in class. To start with let’s create the reader file
+## Objective: To build two separate models for predicting the author of an article on the basis of that article’s textual content.The first part of this exercise derives a lot of its content from `NaiveBayes.R`, that was discussed in class. To start with, let’s create the reader file
 
-read test file
+Read the test file
 
 ``` r
 readerPlain = function(fname){readPlain(elem=list(content=readLines(fname)),
@@ -1380,7 +1384,7 @@ for(author in author_dirs_train) {
 }
 ```
 
-read test data
+Read the test data
 
 ``` r
 author_dirs_test = Sys.glob('./Data/ReutersC50/C50test/*')
@@ -1393,8 +1397,8 @@ for(author in author_dirs_test) {
   labels_test = append(labels_test, rep(author_name, length(files_to_add))) }
 ```
 
-To deal with the words in the test set that we never saw in the training
-set, the training and test sets were combined. This will be used later
+The training and test sets were combined to deal with the words in the
+test set that we never saw in the training set. This will later be used
 to create a single document term matrix with all words from the training
 and test datasets.
 
@@ -1407,9 +1411,7 @@ names(all_docs) = file_lists
 names(all_docs) = sub('.txt', '', names(all_docs))
 my_corpus = Corpus(VectorSource(all_docs))
 #names(my_corpus) = names(all_docs)
-```
 
-``` r
 # Preprocessing
 my_corpus= tm_map(my_corpus, content_transformer(tolower)) # make everything
 ```
@@ -1457,7 +1459,7 @@ DTM
     ## Weighting          : term frequency (tf)
 
 We can see that the sparsity of the document is very high. Let us now
-remove all elements which have a sparse factor greater than 0.975.
+remove all elements that have a sparse factor greater than 0.975.
 
 ``` r
 #inspect(DTM[1:10,1:5])
@@ -1474,11 +1476,11 @@ DTM
 The first model was built using Naive Bayes, which was discussed in
 class.
 
-Naive Bayes: Let us first convert the DTM to a data matrix then we
-separate the training set and test set by just taking the first 2500 and
-the next 2500 entries in the DTM. This should work well simply because
-our file lists were correctly ordered based on train and test.We can see
-that here.
+Naive Bayes: Let us first convert the DTM to a data matrix. Then we
+separate the training set and the test set by just taking the first 2500
+and the subsequent 2500 entries in the DTM. This should work well simply
+because our file lists were correctly ordered based on train and test.
+We can see that here.
 
 ``` r
 X = as.matrix(DTM)
@@ -1527,8 +1529,8 @@ for(i in 1:50)
 }
 ```
 
-Now using the above weight vectors, let us predict the author name of
-the test data. We do this by calculation the log probabilities of all
+Now, using the above weight vectors, let us predict the author name of
+the test data. We do this by calculating the log probabilities of all
 documents across all authors. The author with the highest value will be
 the most probable author for that document.
 
@@ -1560,7 +1562,7 @@ pred[1:10,1:5]
     ## [10,]  -873.7192 -1119.2714  -952.2299 -1108.8045  -988.7300
 
 Let us now create a list with the predicted authors for each document by
-finding the highest probable authors for each document
+finding the highest probable authors for each document.
 
 ``` r
 for (i in 1:2500)
@@ -1841,15 +1843,16 @@ confusionMatrix(predicted$pred_author,predicted$actual_author)
 
 The accuracy of the Naive Bayes classification model is 60.24%. Since
 some authors had works that were very similar, it was tough to
-distinguish them. These authors have a similar “bag of words” making it
+distinguish them. These authors have a similar “bag of words”, making it
 safe to assume that they write on similar topics. In fact, we can see
-several of these occurances in the confusion matrix. For example, look
-at author 14 and 19. 23 articles of author JanLopatka (author number 14)
-have been classified as written by JohnMastrini (author number 19). 11
-of John’s articles have again been classified as written by Jan. This
-means both authors are writing about similar topics.
+several of these occurrences in the confusion matrix. For example, look
+at authors 14 and 19. Twenty-three articles by author JanLopatka (author
+number 14) have been classified as written by JohnMastrini (author
+number 19). 11 of John’s articles have again been classified as written
+by Jan. This means both authors are writing about similar topics.
 
-Lets go ahead and verify that! Below I used random forest to verfy this.
+Let us go ahead and verify that! Below we used the random forest to
+verify this.
 
 ``` r
 actual_author = rep(rep(1:50,each=50),2)
@@ -2134,60 +2137,18 @@ confusionMatrix(predicted_author,author_test$actual_author)
     ## Detection Prevalence    0.0220    0.0304    0.0176
     ## Balanced Accuracy       0.8459    0.7906    0.6543
 
-Using the training and test corpus of Reuters dataset, we built 2
-classifiers - Naive Bayes and Random Forest. Out of these two, Random
-Forest gives slightly better prediction than Naive Bayes. Even though
-the accuracy is slightly higher for Random Forest, we would still choose
+Using the training and test corpus of the Reuters dataset, we built two
+classifiers - Naive Bayes and Random Forest. Of these two, Random Forest
+gives a slightly better prediction than Naive Bayes. Even though the
+accuracy is slightly higher for Random Forest, we would still choose
 Naive Bayes because it is much less complex than Random Forest. It is
 also less computationally intensive compared to Random Forest.
 
-We wanted improve our model so we tried to fit PCA and ran the model
-again
+We wanted to improve our model. So we tried to fit PCA and run the model
+again.
 
-``` r
-text_data_preprocess = function(pp) { 
-  writer_list = list.files(pp)
-  read_f_list = c()
-  
-  readerPlain = function(fname) { 
-    readPlain(elem=list(content=readLines(fname)),id=fname, language='en') }
-  
-  for ( i in writer_list){ 
-    read_f_list = c(read_f_list,Sys.glob(paste0(pp,i,'/*.txt')))
-  }  
-  
-  all_Doc = lapply(read_f_list, readerPlain)
-  mynames = read_f_list %>%
-    { strsplit(., '/', fixed=TRUE) } %>%
-    { lapply(., tail, n=2) } %>%
-    { lapply(., paste0, collapse = '') } %>% unlist  
-  names(all_Doc) = mynames
-  
-  documents_raw = Corpus(VectorSource(all_Doc))
-  
-  my_documents = documents_raw
-  my_documents = tm_map(my_documents, content_transformer(tolower)) # make everything lowercase
-  my_documents = tm_map(my_documents, content_transformer(removeNumbers)) # remove numbers
-  my_documents = tm_map(my_documents, content_transformer(removePunctuation)) # remove punctuation
-  my_documents = tm_map(my_documents, content_transformer(stripWhitespace)) ## remove excess white-space
-  my_documents = tm_map(my_documents, content_transformer(removeWords), stopwords("en"))
-  return(my_documents)
-}
-```
-
-``` r
-get_y = function(pp)
-{ writer_list = list.files(pp) 
-y = c()
-for ( i in writer_list){
-  y = c(y, rep(i, times = length(list.files(paste0(pp,i)))))
-}
-return(y) 
-}
-```
-
-we build our “document term matrix” and prepare for PCA by removing
-sparse terms, sort columns by alphabetical order, and remove the
+We build our “document term matrix” and prepare for PCA by removing
+sparse terms, sorting columns by alphabetical order, and removing the
 zero-sum columns.
 
 ``` r
@@ -2220,8 +2181,8 @@ scrub_cols = which(colSums(tfidf_matrix) == 0)
 pre_pca_1 = tfidf_matrix[,-scrub_cols]
 ```
 
-we will follow the same process for test also and intersect the common
-results from train and test
+We will follow the same process for tests also and intersect the common
+results from the train and test.
 
 ``` r
 test_documents = text_data_preprocess('./Data/ReutersC50/C50test/')
@@ -2249,8 +2210,8 @@ DTM_test_s = DTM_test[, order(DTM_test$dimnames$Terms)]
 Term_inter = intersect(Terms(DTM_test_s), colnames(pre_pca_1))
 ```
 
-running PCA using our training document term matrix, using the
-vocabulary intersection as columns. we will fit naive bayes
+By running PCA using our training document term matrix, using the
+vocabulary intersection as columns, we will fit Naive Bayes.
 
 ``` r
 mycorpus = text_data_preprocess('./Data/ReutersC50/C50train/')
@@ -2391,11 +2352,11 @@ NB_class[order(-NB_class$Sensitivity),][1]
     ## Class: DarrenSchuettler         0.12
 
 The Naive Bayes model prediction accuracy is somewhat low. A different
-model may have better predictive accuracy 0.4396. From confusion matrix
-results we can say that the model predicted well for a few authors like
-LynnleyBrowning,MatthewBunce and RobinSidel.
+model may have better predictive accuracy of 0.4396. From confusion
+matrix results, we can say that the model predicted well for a few
+authors like LynnleyBrowning, MatthewBunce, and RobinSidel.
 
-To further improve upon our accuracy we tried random forest model
+To further improve our accuracy, we tried the random forest model.
 
 ``` r
 set.seed(1)
@@ -2471,60 +2432,14 @@ RF_class[order(-RF_class$Sensitivity),][1]
     ## Class: ScottHillis              0.12
     ## Class: DavidLawder              0.10
 
-The model predict well for a few authors like FumikoFujisaki,
-JimGilchrist and LynnleyBrowning. We can also see that random forest
-model, on average, have a better accuracy then the other model we did.
+The model predicts well for a few authors like FumikoFujisaki,
+JimGilchrist, and LynnleyBrowning. We can also see that the random
+forest model, on average, has better accuracy than the other model we
+tried.
 
 # 9. Association rule mining
 
-load all the libraries required fo the analysis
-
-``` r
-library(readr)
-library(tidyverse) 
-library(arules) 
-```
-
-    ## 
-    ## Attaching package: 'arules'
-
-    ## The following object is masked from 'package:tm':
-    ## 
-    ##     inspect
-
-    ## The following objects are masked from 'package:mosaic':
-    ## 
-    ##     inspect, lhs, rhs
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     recode
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     abbreviate, write
-
-``` r
-library(arulesViz)
-library(reshape)
-```
-
-    ## 
-    ## Attaching package: 'reshape'
-
-    ## The following object is masked from 'package:Matrix':
-    ## 
-    ##     expand
-
-    ## The following objects are masked from 'package:tidyr':
-    ## 
-    ##     expand, smiths
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     rename
-
-load the groceries.txt data
+Load the `groceries.txt` data
 
 ``` r
 df_groceries=read.csv("./Data/groceries.txt")
@@ -2552,9 +2467,9 @@ head(df_groceries,9)
     ## 8             bottled beer
     ## 9
 
-From the above table we can understand that, rows and columns are not
-being ordered correctly. Let’s check the number of fields in the data
-and load the data again.
+From the above table, we can understand that rows and columns are not
+ordered correctly. Let’s check the number of fields in the data and load
+the data again.
 
 ``` r
 max(count.fields('./Data/groceries.txt',sep = ','))
@@ -2609,7 +2524,7 @@ dim(df_groc)
     ## [1] 9835   32
 
 This data has 9835 rows. Let’s get the transaction and bind it with the
-dataframe
+data frame.
 
 ``` r
 row_number=1:nrow(df_groc)
@@ -2639,10 +2554,10 @@ head(df_groc)
     ## 5                                                                    
     ## 6
 
-By noticing the dataframe we can understand that data is not at one
-transaction per row, each variable has different number of levels, we
-need to unstack then order it by transactions and remove the nulls then
-add back to the dataframe using split function
+From the data frame, we can understand that data is not at one
+transaction per row, each variable has a different number of levels. We
+need to unstack, order it by transactions, remove the nulls, and add it
+back to the data frame using the split function.
 
 ``` r
 df_groc1 = melt(df_groc,id=c("row_number"))
@@ -2686,11 +2601,11 @@ head(df_groc1)
     ## 2              2       V1      tropical fruit
     ## 9837           2       V2              yogurt
 
-Above code the output of words in the unstacked format. Let’s create a
-list of baskets. In order to do that, split a data into a list of items
-for each basket then perform lapply() function after removing
-duplicates. lapply() function helps us in applying functions on list/df
-objects and returns a list object of the same length.
+In the above code, the output of words is in unstacked format. Let’s
+create a list of baskets. To do that, we split the data into a list of
+items for each basket then perform the `lapply()` function after
+removing duplicates. `lapply()` function helps us to apply functions on
+list/df objects and returns a list object of the same length.
 
 ``` r
 df_groc1 = split(x=df_groc1$value, f=df_groc1$row_number)
@@ -2744,18 +2659,20 @@ head(df_groc1)
     ## [1] "whole milk"       "butter"           "yogurt"           "rice"            
     ## [5] "abrasive cleaner"
 
-Data is ready to be inserted into the apriori model.We could have run
-the read transaction function where in we don’t have to do any data
-wrangling step for that, We can first read in our grocery list by
-letting each row of the data as a basket of one shopping list then we
-can seperate each row by comma as items in each basket but we wanted to
-try manual method to understand the preprocessing steps \[ groceries =
-read.transactions(‘./Data/groceries.txt’,format = ‘basket’, sep =
-‘,’,rm.duplicates = FALSE)\] grocery\<- as(groceries, “transactions”)
+Data is now ready to be inserted into the apriori model. We could have
+run the read transaction function wherein we don’t have to do any data
+wrangling step. We can first read in our grocery list by letting each
+row of the data as a basket of one shopping list then we can separate
+each row by a comma as items in each basket but we wanted to try manual
+method to understand the preprocessing steps
 
-Lets cast df_groc1 variable as a special arules “transactions” class
-after that run the apriori algorithm with support \> .01 & confidence
-\>.5 & length (# items) \<= 4
+`groceries = read.transactions('./Data/groceries.txt',format = 'basket', sep = ',',rm.duplicates = FALSE)`
+
+`grocery = as(groceries, "transactions")`
+
+Lets cast df_groc1 variable as a special arules “transactions” class.
+Then run the apriori algorithm with support \> .01 & confidence \>.5 &
+length (# items) \<= 4
 
 ``` r
 grocery_trans = as(df_groc1, "transactions")
@@ -2785,7 +2702,7 @@ grocery_rules = apriori(grocery_trans, parameter=list(support=.01, confidence=.5
     ## Absolute minimum support count: 98 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.01s].
+    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.00s].
     ## sorting and recoding items ... [88 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4
@@ -2841,7 +2758,7 @@ plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
-![](Solutions_files/figure-markdown_github/9j-1.png)
+![](Solutions_files/figure-markdown_github/9g-1.png)
 
 The apriori method is used to detect the relationships between the
 various goods in the various baskets that were loaded. We originally
@@ -2851,13 +2768,14 @@ Based on this finding, we discovered that ‘whole milk’ and ‘other
 veggies’ account for a sizable part of purchases at this grocery shop.
 
 As a result, we propose placing ‘whole milk’ and ‘other vegetables’ in
-the centre of our store,which not only enhances our customers’ shopping
-experience by allowing them to get what they need fast, but also boosts
-exposure of other items.
+the center of the store, which not only enhances our customers’ shopping
+experience by allowing them to get what they need quickly but also
+boosts exposure to other items.
 
-Now we should identify more frequent itemsets .In order to do that we
-have to play with cutoff values choose one pair that makes logical.First
-changing the support cutoff and keeping confidence cutoff constant
+Now, we should identify more frequent itemsets. To do that we have to
+play with cutoff values and choose one pair that makes logical sense.
+First, let’s try changing the support cutoff and keeping the confidence
+cutoff constant
 
 ``` r
 grocery_rules= apriori(grocery_trans, parameter=list(support=.005, confidence=.5, maxlen=4))
@@ -3165,9 +3083,9 @@ plot(grocery_rules, method = "graph",
     ## Warning: Too many rules supplied. Only plotting the best 100 using
     ## 'lift' (change control parameter max if needed).
 
-![](Solutions_files/figure-markdown_github/9l-1.png)
+![](Solutions_files/figure-markdown_github/9h-1.png)
 
-The above model gave 120 results so not including the output.
+The above model gave 120 results. So we’re not including the output.
 
 ``` r
 grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.8, 
@@ -3198,7 +3116,7 @@ grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.
     ## = 0.8, : Mining stopped (maxlen reached). Only patterns up to a length of 4
     ## returned!
 
-    ##  done [0.01s].
+    ##  done [0.00s].
     ## writing ... [6 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -3255,7 +3173,7 @@ grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015,
     ## = 0.9, : Mining stopped (maxlen reached). Only patterns up to a length of 5
     ## returned!
 
-    ##  done [0.01s].
+    ##  done [0.00s].
     ## writing ... [7 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -3291,17 +3209,17 @@ plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
-![](Solutions_files/figure-markdown_github/9o-1.png)
+![](Solutions_files/figure-markdown_github/9j-1.png)
 
-This time also we were expecting whole milk and other combinations but
-surprisingly we got the item liquour, rd/blush wine and bottled beer
-with 19 occurences.This has support of 0.0015 so this seems to be
-optimal support, confidence and the maxlen.
+This time as well, we were expecting whole milk and other combinations.
+But surprisingly, we got the item liquor, rd/blush wine, and bottled
+beer with 19 occurrences. This has the support of 0.0015. So, this seems
+to be optimal support, confidence, and the maxlen.
 
 1.  Whole milk goes with cream cheese/butter/yogurt/sugar and root/other
-    vegetables/tropical fruits/domestic eggs. These all look like a
-    regular grocery shopping and we can say all the other items have
-    very good associations as well.
+    vegetables/tropical fruits/domestic eggs. All these look like a
+    regular grocery shopping scenario, and we can say all other items
+    have very good associations as well.
 
 2.  Customers that come in to buy alcohol usually buy many different
     types of alcohol.
@@ -3309,4 +3227,4 @@ optimal support, confidence and the maxlen.
 So the association of liquor and red/blush wine with bottled beer makes
 perfect sense, and its confidence conveys the same narrative. Placing
 these above itemsets next to each other in the grocery store will make
-shopping very convenient for the customers.
+shopping convenient for the customers.

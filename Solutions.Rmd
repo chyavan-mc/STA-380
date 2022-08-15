@@ -290,7 +290,7 @@ using [capmetro_UT.csv](./Data/capmetro_UT.csv) <br>
 
 # 5. Portfolio Modeling
 
-For this question, we decided to do 3 different tests with different types of ETFs to understand the different gains and losses through bootstrapping. 
+For this question, we decided to do three different tests with different types of ETFs to understand the different gains and losses through bootstrapping. 
 
 We first used Oil and Gas commodity ETFs to understand how much we would potentially be gaining or losing if we were to invest in them. 
 
@@ -348,16 +348,16 @@ head(all_returns)
 all_returns = as.matrix(na.omit(all_returns))
 ```
 
-From the coefficients we can see the difference in each stocks and how they differ from day to day. We started measuring from 5 years back till today. 
+From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today. 
 
-We then made a pairs plot to see each ETF against each other
+We then made a pairs plot to see each ETF against each other.
 
 ```{r 5c, echo = FALSE}
 # Compute the returns from the closing prices
 pairs(all_returns)
 ```
 
-We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of the random day. 
+We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day. 
 
 ```{r 5d, echo = FALSE}
 # Sample a random return from the empirical joint distribution
@@ -505,7 +505,7 @@ head(all_returns)
 all_returns = as.matrix(na.omit(all_returns))
 ```
 
-From the coefficients we can see the difference in each stocks and how they differ from day to day. We started measuring from 5 years back till today. 
+From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today. 
 
 We then made a pairs plot to see each ETF against each other
 
@@ -514,7 +514,7 @@ We then made a pairs plot to see each ETF against each other
 pairs(all_returns)
 ```
 
-We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of the random day. 
+We then simulate a random day where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day. 
 
 ```{r 5k, echo = FALSE}
 # Sample a random return from the empirical joint distribution
@@ -662,16 +662,16 @@ head(all_returns)
 all_returns = as.matrix(na.omit(all_returns))
 ```
 
-From the coefficients we can see the difference in each stocks and how they differ from day to day. We started measuring from 5 years back till today. 
+From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today. 
 
-We then made a pairs plot to see each ETF against each other
+We then made a pairs plot to see each ETF against each other.
 
 ```{r 5q, echo = FALSE}
 # Compute the returns from the closing prices
 pairs(all_returns)
 ```
 
-We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of the random day. 
+We then simulate a random day where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day. 
 
 ```{r 5r, echo = FALSE}
 # Sample a random return from the empirical joint distribution
@@ -761,12 +761,13 @@ quantile(sim1[,n_days]- initial_wealth, prob=0.05)
 # express VaR as a positive number (e.g. 500)
 ```
 
-So our ultimate gain/loss would be output [1], however this could change due to randomization in bootstrapping.
+So our ultimate gain/loss would be output [1]. However, this could change due to randomization in bootstrapping.
 
 When we compare all three, we can see which portfolio is better to invest in, as it gains more capital or loses the least. 
 
 
 # 6. Clustering and PCA
+
 ```{r 6a, include=FALSE}
 library(tidyverse)
 library(cluster)
@@ -798,7 +799,7 @@ plot(pve, xlab = "Principal Component", ylab = "Proportion of Variance Explained
 plot(cumsum(pve), xlab = "Principal Component", ylab = "Cumulative Proportion of Variance Explained", ylim = c(0,1), type = 'b')
 ```
 
-PCA allowed us to reduce the dimensionality of this very large dataset. This gave us a deeper insight on the key variables in the dataset. This unsupervised learning tool is valuable, as the information generated from this model can be applied in supervised learning methods. From this model, 12 different principal components were generated. The graph shows that PC1 and PC2 explain a greater proportion of variance in the dataset than the other principal components do. This is the general trend, so it was expected these principal components would capture the most variance. In PC1, the variables with the greatest magnitude were total sulfur dioxide, free sulfur dioxide, and volatile acidity. For PC2 alcohol had the greatest magnitude. This gives insight on where the highest variance exists in the dataset, as the first PC attempts to account for the highest variance and then the second is the next highest, and so forth.
+PCA allowed us to reduce the dimensionality of this massive dataset. This gave us a deeper insight into the key variables in the dataset. This unsupervised learning tool is valuable, as the information generated from this model can be applied in supervised learning methods. From this model, 12 different principal components were generated. The graph shows that PC1 and PC2 explain a greater proportion of variance in the dataset than the other principal components do. This is the general trend, so it was expected these principal components would capture the most variance. In PC1, the variables with the highest magnitude were total sulfur dioxide, free sulfur dioxide, and volatile acidity. For PC2 alcohol had the highest magnitude. This gives insight into where the highest variance exists in the dataset, as the first PC attempts to account for the highest variance, and then the second is the next highest, and so forth.
 
 ```{r K_Means_Clustering}
 wine = read.csv("./Data/wine.csv")
@@ -824,9 +825,11 @@ clusplot(mydata, fit$cluster, color=TRUE, shade=TRUE,
    labels=2, lines=0)
 ```
 
-For this dataset, K Means Clustering was chosen over PCA to analyze different wines and their 11 associated chemical properties. K Means Clustering made more sense for this probloem as it will identify groups not explicity labeled in the data, which is exactly what we were testing. The goal of this unsupervised learning model was to see if these wines can be clustered based on similar properties. The 'color' column was removed, because we were trying to create a model that would correctly classify the wines as red or white. 
-#The K Means Clusering model did correctly cluster some of the red and white wines, but it was not 100% accurate. To test how well our K Means Clustering model was at classifying red vs white wines, we added back the color column and studied if all the red wines and white wines were assigned the same cluster. It appeared that the red wines were correctly classified, but several of the white wines were not. Overall, this model was able to distinguish between red and white wine but did not have a perfect accuracy. 
-#Finally, we tested if the K Means Clustering model was able to correctly distinguish between high and low quality wines. The study this, the clusters column and the quality columns were compared and there did not appear to be any clustering based on quality. For example, a wine rated as a 3 was clustered in the same cluster as wines getting a rating of 6+. Further tests could be run to study why this was occuring.
+For this dataset, K Means Clustering was chosen over PCA to analyze different wines and their 11 associated chemical properties. K Means Clustering made more sense for this problem as it will identify groups not explicitly labeled in the data, which is exactly what we were testing. The goal of this unsupervised learning model was to see if these wines can be clustered based on similar properties. The 'color' column was removed because we were trying to create a model that would correctly cluster the wines as red or white. 
+
+The K Means Clustering model did correctly cluster some of the red and white wines, but it was not 100% accurate. To test how well our K Means Clustering model was at classifying red vs white wines, we added back the color column and studied if all the red wines and white wines were assigned the same cluster. It appeared that the red wines were correctly classified, but several of the white wines were not. Overall, this model was able to distinguish between red and white wine but did not have perfect accuracy. 
+
+Finally, we tested if the K Means Clustering model was able to correctly distinguish between high and low-quality wines. To study this, the clusters column and the quality columns were compared and there did not appear to be any clustering based on quality. For example, a wine rated as a 3 was clustered in the same cluster as wines getting a rating of 6+. Further tests could be run to study why this was occurring.
 
 # 7. Market Segmentation
 
@@ -986,7 +989,7 @@ After plotting linear models with all 3 PCs, we can see that the main difference
 
 # 8. The Reuters corpus
 
-## Objective: To build two separate models for predicting the author of an article on the basis of that article's textual content.The first part of this exercise derives a lot of its content from NaiveBayes.R which was discussed in class. To start with let's create the reader file
+## Objective: To build two separate models for predicting the author of an article on the basis of that article's textual content.The first part of this exercise derives a lot of its content from `NaiveBayes.R`, that was discussed in class. To start with, let's create the reader file
 
 ```{r 8a, include=FALSE}
 library(tm)
@@ -995,7 +998,7 @@ library(e1071)
 library(randomForest)
 ```
 
-read test file
+Read the test file
 
 ```{r 8b}
 readerPlain = function(fname){readPlain(elem=list(content=readLines(fname)),
@@ -1011,7 +1014,7 @@ for(author in author_dirs_train) {
 }
 ```
 
-read test data
+Read the test data
 
 ```{r 8c}
 author_dirs_test = Sys.glob('./Data/ReutersC50/C50test/*')
@@ -1024,7 +1027,7 @@ for(author in author_dirs_test) {
   labels_test = append(labels_test, rep(author_name, length(files_to_add))) }
 ```
 
-To deal with the words in the test set that we never saw in the training set, the training and test sets were combined. This will be used later to create a single document term matrix with all words from the training and test datasets.
+The training and test sets were combined to deal with the words in the test set that we never saw in the training set. This will later be used to create a single document term matrix with all words from the training and test datasets.
 
 ```{r 8d}
 file_lists = append(file_list_train,file_list_test)
@@ -1035,9 +1038,7 @@ names(all_docs) = file_lists
 names(all_docs) = sub('.txt', '', names(all_docs))
 my_corpus = Corpus(VectorSource(all_docs))
 #names(my_corpus) = names(all_docs)
-```
 
-```{r 8e}
 # Preprocessing
 my_corpus= tm_map(my_corpus, content_transformer(tolower)) # make everything
 my_corpus= tm_map(my_corpus, content_transformer(removeNumbers)) # remove numbers
@@ -1047,12 +1048,11 @@ my_corpus = tm_map(my_corpus, content_transformer(removeWords), stopwords("SMART
 
 DTM = DocumentTermMatrix(my_corpus)
 DTM
-
 ```
 
-We can see that the sparsity of the document is very high. Let us now remove all elements which have a sparse factor greater than 0.975.
+We can see that the sparsity of the document is very high. Let us now remove all elements that have a sparse factor greater than 0.975.
 
-```{r 8f}
+```{r 8e}
 #inspect(DTM[1:10,1:5])
 DTM = removeSparseTerms(DTM, 0.975)
 DTM
@@ -1060,9 +1060,9 @@ DTM
 
 The first model was built using Naive Bayes, which was discussed in class.
 
-Naive Bayes: Let us first convert the DTM to a data matrix then we separate the training set and test set by just taking the first 2500 and the next 2500 entries in the DTM. This should work well simply because our file lists were correctly ordered based on train and test.We can see that here.
+Naive Bayes: Let us first convert the DTM to a data matrix. Then we separate the training set and the test set by just taking the first 2500 and the subsequent 2500 entries in the DTM. This should work well simply because our file lists were correctly ordered based on train and test. We can see that here.
 
-```{r 8g}
+```{r 8f}
 X = as.matrix(DTM)
 
 file_lists[2490:2510]
@@ -1074,7 +1074,7 @@ labels = unique(labels)
 
 Now let us calculate the term level weights for each author by applying the Laplace smoothing factor.
 
-```{r 8h}
+```{r 8g}
 smooth_count = 1/nrow(X_train)
 for(i in 1:50)
 {
@@ -1084,9 +1084,9 @@ for(i in 1:50)
 }
 ```
 
-Now using the above weight vectors, let us predict the author name of the test data. We do this by calculation the log probabilities of all documents across all authors. The author with the highest value will be the most probable author for that document.
+Now, using the above weight vectors, let us predict the author name of the test data. We do this by calculating the log probabilities of all documents across all authors. The author with the highest value will be the most probable author for that document.
 
-```{r 8i}
+```{r 8h}
 X_test =  X[2501:5000,]
 
 pred = matrix(, nrow = 2500, ncol = 51) 
@@ -1101,9 +1101,9 @@ for(i in 1:2500)
 pred[1:10,1:5]
 ```
 
-Let us now create a list with the predicted authors for each document by finding the highest probable authors for each document
+Let us now create a list with the predicted authors for each document by finding the highest probable authors for each document.
 
-```{r 8j}
+```{r 8i}
 
 for (i in 1:2500)
 {
@@ -1118,11 +1118,11 @@ predicted = data.frame(
 confusionMatrix(predicted$pred_author,predicted$actual_author)
 ```
 
-The accuracy of the Naive Bayes classification model is 60.24%. Since some authors had works that were very similar, it was tough to distinguish them. These authors have a similar "bag of words" making it safe to assume that they write on similar topics. In fact, we can see several of these occurances in the confusion matrix. For example, look at author 14 and 19. 23 articles of author JanLopatka (author number 14) have been classified as written by JohnMastrini (author number 19). 11 of John's articles have again been classified as written by Jan. This means both authors are writing about similar topics.
+The accuracy of the Naive Bayes classification model is 60.24%. Since some authors had works that were very similar, it was tough to distinguish them. These authors have a similar "bag of words", making it safe to assume that they write on similar topics. In fact, we can see several of these occurrences in the confusion matrix. For example, look at authors 14 and 19. Twenty-three articles by author JanLopatka (author number 14) have been classified as written by JohnMastrini (author number 19). 11 of John's articles have again been classified as written by Jan. This means both authors are writing about similar topics.
 
-Lets go ahead and verify that! Below I used random forest to verfy this.
+Let us go ahead and verify that! Below we used the random forest to verify this.
 
-```{r 8k}
+```{r 8j}
 actual_author = rep(rep(1:50,each=50),2)
 author = as.data.frame(X)
 colnames(author) = make.names(colnames(author))
@@ -1142,11 +1142,11 @@ predicted_author=predict(rf_author,newdata=author_test)
 confusionMatrix(predicted_author,author_test$actual_author)
 ```
 
-Using the training and test corpus of Reuters dataset, we built 2 classifiers - Naive Bayes and Random Forest. Out of these two, Random Forest gives slightly better prediction than Naive Bayes. Even though the accuracy is slightly higher for Random Forest, we would still choose Naive Bayes because it is much less complex than Random Forest. It is also less computationally intensive compared to Random Forest.
+Using the training and test corpus of the Reuters dataset, we built two classifiers - Naive Bayes and Random Forest. Of these two, Random Forest gives a slightly better prediction than Naive Bayes. Even though the accuracy is slightly higher for Random Forest, we would still choose Naive Bayes because it is much less complex than Random Forest. It is also less computationally intensive compared to Random Forest.
 
-We wanted improve our model so we tried to fit PCA and ran the model again
+We wanted to improve our model. So we tried to fit PCA and run the model again.
 
-```{r 8l, include=FALSE}
+```{r 8k, include=FALSE}
 library(tm)
 library(magrittr) 
 library(slam)
@@ -1160,9 +1160,7 @@ library(naivebayes)
 library(randomForest)
 library(e1071) 
 library(caret)
-```
 
-```{r 8m}
 text_data_preprocess = function(pp) { 
   writer_list = list.files(pp)
   read_f_list = c()
@@ -1191,9 +1189,7 @@ text_data_preprocess = function(pp) {
   my_documents = tm_map(my_documents, content_transformer(removeWords), stopwords("en"))
   return(my_documents)
 }
-```
 
-```{r 8n}
 get_y = function(pp)
 { writer_list = list.files(pp) 
 y = c()
@@ -1202,12 +1198,11 @@ for ( i in writer_list){
 }
 return(y) 
 }
-
 ```
 
-we build our "document term matrix" and prepare for PCA by removing sparse terms, sort columns by alphabetical order, and remove the zero-sum columns.
+We build our "document term matrix" and prepare for PCA by removing sparse terms, sorting columns by alphabetical order, and removing the zero-sum columns.
 
-```{r 8o}
+```{r 8l}
 my_documents = text_data_preprocess('./Data/ReutersC50/C50train/')
 y = get_y('./Data/ReutersC50/C50train/') 
 DTM_all = DocumentTermMatrix(my_documents)
@@ -1219,9 +1214,9 @@ scrub_cols = which(colSums(tfidf_matrix) == 0)
 pre_pca_1 = tfidf_matrix[,-scrub_cols]
 ```
 
-we will follow the same process for test also and intersect the common results from train and test
+We will follow the same process for tests also and intersect the common results from the train and test.
 
-```{r 8p}
+```{r 8m}
 test_documents = text_data_preprocess('./Data/ReutersC50/C50test/')
 y_test = get_y('./Data//ReutersC50/C50test')
 DTM_test = DocumentTermMatrix(test_documents) 
@@ -1229,9 +1224,9 @@ DTM_test_s = DTM_test[, order(DTM_test$dimnames$Terms)]
 Term_inter = intersect(Terms(DTM_test_s), colnames(pre_pca_1))
 ```
 
-running PCA using our training document term matrix, using the vocabulary intersection as columns. we will fit naive bayes
+By running PCA using our training document term matrix, using the vocabulary intersection as columns, we will fit Naive Bayes.
 
-```{r 8q}
+```{r 8n}
 mycorpus = text_data_preprocess('./Data/ReutersC50/C50train/')
 labels = get_y('./Data/ReutersC50/C50train/')
 DTM = DocumentTermMatrix(mycorpus) 
@@ -1271,17 +1266,17 @@ for (i in seq(1,50)){
   correct = correct + TestTable[i,i] }
 NB_accuracy = correct/2500
 print(NB_accuracy)
-```
 
-```{r 8r}
 NB_confusion = confusionMatrix(table(predNB,labels)) 
 NB_class= as.data.frame(NB_confusion$byClass)
 NB_class[order(-NB_class$Sensitivity),][1]
 ```
-The Naive Bayes model prediction accuracy is somewhat low. A different model may have better predictive accuracy 0.4396. From confusion matrix results we can say that the model predicted well for a few authors like LynnleyBrowning,MatthewBunce and RobinSidel.
 
-To further improve upon our accuracy we tried random forest model
-```{r 8s}
+The Naive Bayes model prediction accuracy is somewhat low. A different model may have better predictive accuracy of 0.4396. From confusion matrix results, we can say that the model predicted well for a few authors like LynnleyBrowning, MatthewBunce, and RobinSidel.
+
+To further improve our accuracy, we tried the random forest model.
+
+```{r 8o}
 set.seed(1)
 RF = randomForest(y=as.factor(labels), x=train_matrix,ntrees=500) 
 pr = predict(RF, test_matrix, type = "response")
@@ -1296,17 +1291,13 @@ print(RF_accuracy)
 RF_confusion = confusionMatrix(table(pr,labels))
 RF_class= as.data.frame(RF_confusion$byClass) 
 RF_class[order(-RF_class$Sensitivity),][1]
-
 ```
 
-The model predict well for a few authors like FumikoFujisaki, JimGilchrist and LynnleyBrowning. We can also see that random forest model, on average, have a better accuracy then the other model we did.
+The model predicts well for a few authors like FumikoFujisaki, JimGilchrist, and LynnleyBrowning. We can also see that the random forest model, on average, has better accuracy than the other model we tried.
 
 # 9. Association rule mining
 
-load all the libraries required fo the analysis
-
-```{r 9a}
-
+```{r 9a, include=FALSE}
 library(readr)
 library(tidyverse) 
 library(arules) 
@@ -1314,37 +1305,35 @@ library(arulesViz)
 library(reshape)
 ```
 
-load the groceries.txt data
+Load the `groceries.txt` data
 
 ```{r 9b}
 df_groceries=read.csv("./Data/groceries.txt")
 head(df_groceries,9)
 ```
 
-From the above table we can understand that, rows and columns are not being ordered correctly. Let's check the number of fields in the data and load the data again.
+From the above table, we can understand that rows and columns are not ordered correctly. Let's check the number of fields in the data and load the data again.
 
 ```{r 9c}
 max(count.fields('./Data/groceries.txt',sep = ','))
-```
 
-```{r 9d}
 df_groc = read.csv("./Data/groceries.txt", header = FALSE, col.names =
                   paste0("V",seq_len(32)), fill = TRUE)
 head(df_groc,10)
 dim(df_groc)
 ```
 
-This data has 9835 rows. Let's get the transaction and bind it with the dataframe
+This data has 9835 rows. Let's get the transaction and bind it with the data frame.
 
-```{r 9e}
+```{r 9d}
 row_number=1:nrow(df_groc)
 df_groc=cbind(row_number,df_groc)
 head(df_groc)
 ```
 
-By noticing the dataframe we can understand that data is not at one transaction per row, each variable has different number of levels, we need to unstack then order it by transactions and remove the nulls then add back to the dataframe using split function
+From the data frame, we can understand that data is not at one transaction per row, each variable has a different number of levels. We need to unstack, order it by transactions, remove the nulls, and add it back to the data frame using the split function.
 
-```{r 9f}
+```{r 9e}
 df_groc1 = melt(df_groc,id=c("row_number"))
 df_groc1 = df_groc1[order(df_groc1$row_number),]
 df_groc1[df_groc1==""] <- NA
@@ -1357,9 +1346,9 @@ df_groc1$row_number = factor(df_groc1$row_number)
 head(df_groc1)
 ```
 
-Above code the output of words in the unstacked format. Let's create a list of baskets. In order to do that, split a data into a list of items for each basket then perform lapply() function after removing duplicates. lapply() function helps us in applying functions on list/df objects and returns a list object of the same length.
+In the above code, the output of words is in unstacked format. Let's create a list of baskets. To do that, we split the data into a list of items for each basket then perform the `lapply()` function after removing duplicates. `lapply()` function helps us to apply functions on list/df objects and returns a list object of the same length.
 
-```{r 9g}
+```{r 9f}
 df_groc1 = split(x=df_groc1$value, f=df_groc1$row_number)
 head(df_groc1)
 
@@ -1367,21 +1356,21 @@ df_groc1 = lapply(df_groc1, unique)
 head(df_groc1)
 ```
 
-Data is ready to be inserted into the apriori model.We could have run the read transaction function where in we don't have to do any data wrangling step for that, We can first read in our grocery list by letting each row of the data as a basket of one shopping list then we can seperate each row by comma as items in each basket but we wanted to try manual method to understand the preprocessing steps [ groceries = read.transactions('./Data/groceries.txt',format = 'basket', sep = ',',rm.duplicates = FALSE)] grocery\<- as(groceries, "transactions")
+Data is now ready to be inserted into the apriori model. We could have run the read transaction function wherein we don't have to do any data wrangling step. We can first read in our grocery list by letting each row of the data as a basket of one shopping list then we can separate each row by a comma as items in each basket but we wanted to try manual method to understand the preprocessing steps
 
-Lets cast df_groc1 variable as a special arules "transactions" class after that run the apriori algorithm with support \> .01 & confidence \>.5 & length (\# items) \<= 4
+`groceries = read.transactions('./Data/groceries.txt',format = 'basket', sep = ',',rm.duplicates = FALSE)`
 
-```{r 9h}
+`grocery = as(groceries, "transactions")`
+
+Lets cast df_groc1 variable as a special arules "transactions" class. Then run the apriori algorithm with support > .01 & confidence >.5 & length (# items) <= 4
+
+```{r 9g}
 grocery_trans = as(df_groc1, "transactions")
 grocery_trans
 grocery_rules = apriori(grocery_trans, parameter=list(support=.01, confidence=.5, maxlen=4))
-```
 
-```{r 9i}
 arules::inspect(grocery_rules)
-```
 
-```{r 9j}
 library(arulesViz)
 plot(grocery_rules, method = "graph", 
      measure = "confidence", shading = "lift")
@@ -1389,47 +1378,41 @@ plot(grocery_rules, method = "graph",
 
 The apriori method is used to detect the relationships between the various goods in the various baskets that were loaded. We originally used a tougher criterion of support value = 0.01 and confidence = 0.5, and the results were primarily 'whole milk' and 'other vegetables'. Based on this finding, we discovered that 'whole milk' and 'other veggies' account for a sizable part of purchases at this grocery shop.
 
-As a result, we propose placing 'whole milk' and 'other vegetables' in the centre of our store,which not only enhances our customers' shopping experience by allowing them to get what they need fast, but also boosts exposure of other items.
+As a result, we propose placing 'whole milk' and 'other vegetables' in the center of the store, which not only enhances our customers' shopping experience by allowing them to get what they need quickly but also boosts exposure to other items.
 
-Now we should identify more frequent itemsets .In order to do that we have to play with cutoff values choose one pair that makes logical.First changing the support cutoff and keeping confidence cutoff constant
+Now, we should identify more frequent itemsets. To do that we have to play with cutoff values and choose one pair that makes logical sense. First, let's try changing the support cutoff and keeping the confidence cutoff constant
 
-```{r 9k}
+```{r 9h}
 grocery_rules= apriori(grocery_trans, parameter=list(support=.005, confidence=.5, maxlen=4))
 arules::inspect(grocery_rules)     
-```
 
-```{r 9l}
 plot(grocery_rules, method = "graph", 
      measure = "confidence", shading = "lift")
 ```
 
-The above model gave 120 results so not including the output.
+The above model gave 120 results. So we're not including the output.
 
-```{r 9m}
+```{r 9i}
 grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.8, 
                                                  maxlen=4))
 arules::inspect(grocery_rules)
-
 ```
 
 Again, nothing new. All that we would expect. I am decreasing the support even further and increasing the maxlen to 5
 
-```{r 9n}
+```{r 9j}
 grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015, 
                                                  confidence=.9, maxlen=5))
 arules::inspect(grocery_rules)
 
-```
-
-```{r 9o}
 plot(grocery_rules, method = "graph", 
      measure = "confidence", shading = "lift")
 ```
 
-This time also we were expecting whole milk and other combinations but surprisingly we got the item liquour, rd/blush wine and bottled beer with 19 occurences.This has support of 0.0015 so this seems to be optimal support, confidence and the maxlen.
+This time as well, we were expecting whole milk and other combinations. But surprisingly, we got the item liquor, rd/blush wine, and bottled beer with 19 occurrences. This has the support of 0.0015. So, this seems to be optimal support, confidence, and the maxlen.
 
-1. Whole milk goes with cream cheese/butter/yogurt/sugar and root/other vegetables/tropical fruits/domestic eggs. These all look like a regular grocery shopping and we can say all the other items have very good associations as well.
+1. Whole milk goes with cream cheese/butter/yogurt/sugar and root/other vegetables/tropical fruits/domestic eggs. All these look like a regular grocery shopping scenario, and we can say all other items have very good associations as well.
 
 2. Customers that come in to buy alcohol usually buy many different types of alcohol.
 
-So the association of liquor and red/blush wine with bottled beer makes perfect sense, and its confidence conveys the same narrative. Placing these above itemsets next to each other in the grocery store will make shopping very convenient for the customers.
+So the association of liquor and red/blush wine with bottled beer makes perfect sense, and its confidence conveys the same narrative. Placing these above itemsets next to each other in the grocery store will make shopping convenient for the customers.
