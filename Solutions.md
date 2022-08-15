@@ -170,7 +170,7 @@ you two hints on two possibilities:
     `length` and `unique` commands.
 
 ``` r
-musical_diversity = billboard[,c("performer", "song", "year")] 
+musical_diversity = billboard[,c("performer", "song", "year")]
 musical_diversity = musical_diversity %>% filter(!(year %in% c(2021, 1958)))
 musical_diversity = unique(musical_diversity)
 musical_diversity = musical_diversity %>% group_by(year) %>% summarize(unique=n())
@@ -230,7 +230,7 @@ ggplot(data=ten_week_hitters, aes(x=reorder(performer, +count), y=count)) +
 # 3. Visual story telling part 1: Green Buildings
 
 using [greenbuildings.csv](./Data/greenbuildings.csv) <br> *\*use raw
-preview to view the R-code*
+preview (on the Solutions.Rmd) to view the R-code*
 
     ## 160 outliers were removed from the data
 
@@ -351,7 +351,112 @@ returns.
 # 4. Visual story telling part 2: Capital Metro data
 
 using [capmetro_UT.csv](./Data/capmetro_UT.csv) <br> *\*use raw preview
-to view the R-code*
+(on the Solutions.Rmd) to view the R-code*
+
+| year | month | day | hour | minute | date       | day_of_week | weekend | temperature | boarding | alighting | traffic |
+|----:|----:|---:|----:|-----:|:-------|:--------|:-----|--------:|------:|-------:|-----:|
+| 2018 |     9 |   1 |    6 |      0 | 2018-09-01 | Sat         | weekend |       74.82 |        0 |         1 |       1 |
+| 2018 |     9 |   1 |    6 |     15 | 2018-09-01 | Sat         | weekend |       74.82 |        2 |         1 |       3 |
+| 2018 |     9 |   1 |    6 |     30 | 2018-09-01 | Sat         | weekend |       74.82 |        3 |         4 |       7 |
+| 2018 |     9 |   1 |    6 |     45 | 2018-09-01 | Sat         | weekend |       74.82 |        3 |         4 |       7 |
+| 2018 |     9 |   1 |    7 |      0 | 2018-09-01 | Sat         | weekend |       74.39 |        2 |         4 |       6 |
+| 2018 |     9 |   1 |    7 |     15 | 2018-09-01 | Sat         | weekend |       74.39 |        4 |         4 |       8 |
+
+Initial data of CapMetro
+
+We have formatted the initial data, where the date and time are now
+different columns which we can analyze in terms of each day, month,
+hour, etc. We have also added a new column called traffic, which is the
+sum of boarding and alighting signifying the foot traffic in the buses
+in general.
+
+![](Solutions_files/figure-markdown_github/4c-1.png)
+
+From the overall data, we can clearly see that weekdays have significant
+traffic compared to weekends.
+
+![](Solutions_files/figure-markdown_github/4d-1.png)
+
+On a particular weekday, we can also see that there are two significant
+time periods where the traffic is high. Around 8-10 am in the mornings
+we see that most of the traffic is contributed by the “alighting”
+passengers meaning buses have more people getting off near the
+university in the morning. The other peak is around 3-5 pm when most of
+the students finish their classes, and thus a large percentage of the
+traffic is contributed by people “boarding” the buses near the
+university.
+
+We can also see this traffic is significantly high compared to weekends
+from the second graph.
+
+Let’s now see how the traffic varies through the months (Sep 2018 - Nov
+2018)
+
+![](Solutions_files/figure-markdown_github/4e-1.png)
+
+We don’t see any drastic changes in the three months for which we have
+the data. How does the traffic change over a closer look at the dates?
+Does the traffic change over the temperatures of the day? Let’s take a
+look.
+
+![](Solutions_files/figure-markdown_github/4g-1.png)
+
+There seem to be some outliers in the data where the traffic has steeply
+fallen. Let’s see what those outliers are and see if removing them gives
+us a more clear trend in the data.
+
+    ## # A tibble: 4 × 3
+    ##   date       temp_day traffic_day
+    ##   <date>        <dbl>       <dbl>
+    ## 1 2018-09-03     81.6       24.0 
+    ## 2 2018-11-21     49.9       30.9 
+    ## 3 2018-11-22     57.0        8.77
+    ## 4 2018-11-23     65.3       14.3
+
+We can see that these dates where the outliers occurred were university
+holidays. 3rd September was Labor Day, and the three days in November
+were the Thanksgiving weekend.
+
+![](Solutions_files/figure-markdown_github/4i-1.png)
+
+We can see an overall decrease in the temperature over the time period
+of the data from September to November. Along with the decrease in
+temperature, can we also say there was a decrease in the ridership as it
+follows a similar trend?
+
+    ##       year          month         day             hour           minute     
+    ##  Min.   :2018   Min.   : 9   Min.   : 1.00   Min.   : 6.00   Min.   : 0.00  
+    ##  1st Qu.:2018   1st Qu.: 9   1st Qu.: 8.00   1st Qu.: 9.75   1st Qu.:11.25  
+    ##  Median :2018   Median :10   Median :16.00   Median :13.50   Median :22.50  
+    ##  Mean   :2018   Mean   :10   Mean   :15.67   Mean   :13.50   Mean   :22.50  
+    ##  3rd Qu.:2018   3rd Qu.:11   3rd Qu.:23.00   3rd Qu.:17.25   3rd Qu.:33.75  
+    ##  Max.   :2018   Max.   :11   Max.   :31.00   Max.   :21.00   Max.   :45.00  
+    ##                                                                             
+    ##       date            day_of_week   weekend           temperature   
+    ##  Min.   :2018-09-01   Sun:832     Length:5824        Min.   :29.18  
+    ##  1st Qu.:2018-09-23   Mon:832     Class :character   1st Qu.:59.20  
+    ##  Median :2018-10-16   Tue:832     Mode  :character   Median :72.75  
+    ##  Mean   :2018-10-16   Wed:832                        Mean   :69.28  
+    ##  3rd Qu.:2018-11-08   Thu:832                        3rd Qu.:79.29  
+    ##  Max.   :2018-11-30   Fri:832                        Max.   :97.64  
+    ##                       Sat:832                                       
+    ##     boarding        alighting         traffic      
+    ##  Min.   :  0.00   Min.   :  0.00   Min.   :  0.00  
+    ##  1st Qu.: 13.00   1st Qu.: 13.00   1st Qu.: 30.00  
+    ##  Median : 33.00   Median : 28.00   Median : 93.00  
+    ##  Mean   : 51.51   Mean   : 47.65   Mean   : 99.16  
+    ##  3rd Qu.: 79.25   3rd Qu.: 64.00   3rd Qu.:156.00  
+    ##  Max.   :288.00   Max.   :304.00   Max.   :355.00  
+    ## 
+
+![](Solutions_files/figure-markdown_github/4f-1.png)
+
+There is a correlation between temperature and bus rides. We can see
+that people prefer to use public transportation (buses) when the weather
+is good. As the temperature increases from 29 to 75 degrees, we see a
+drastic increase in ridership. But at the same time, the ridership also
+decreases drastically when the temperature goes above 80 degrees,
+reaching almost zero traffic at high temperatures of 93+ degrees.
 
 # 5. Portfolio Modeling
 
@@ -396,16 +501,16 @@ $100K capital equally and then find the sum to compute our new total
 wealth at the end of a random day.
 
     ##            ClCl.USOa ClCl.UNGa ClCl.OILKa ClCl.GAZa ClCl.RJNa
-    ## 2018-11-15  20050.21  16174.97   20075.19  16850.84  19230.77
+    ## 2019-01-17  19945.75  20035.44   19928.32  20016.37     20000
 
-    ## [1] 92381.98
+    ## [1] 99925.87
 
 So as we can see on a random day we went from $100,000 in capital to the
 output.
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 98981.17
+    ## [1] 87237.4
 
 ![](Solutions_files/figure-markdown_github/5e-1.png)
 
@@ -414,40 +519,40 @@ So we can see the change in our capital over the time of 20 days.
 So now we bootstrap this model.
 
     ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
-    ## result.1 100965.83  95880.49  95858.17  98427.27  97535.74  99575.10  99944.61
-    ## result.2 100999.03 100316.12 100594.88 100003.80  97608.06  97844.83  99688.65
-    ## result.3  71308.09  72330.12  74799.18  76475.09  75791.27  75555.26  77430.97
-    ## result.4  99584.67  97918.17  99440.63  97387.79  99116.30  98730.17  99276.96
-    ## result.5 105308.23 103189.77 100858.58 101927.57 102457.20 104900.24 106141.03
-    ## result.6 101747.38 102728.74 102913.23 103067.23 105205.65 105689.44 106710.88
+    ## result.1  99750.49  98114.06  98370.23  97754.64  94232.44  95180.01  96562.83
+    ## result.2  99737.03 101234.37  94982.18  95191.96  93978.48  94680.29  94042.62
+    ## result.3  97169.28  97562.31  97710.39  98527.67  96724.90  93937.81  96395.40
+    ## result.4  96924.63  95157.02  91353.38  90354.14  88790.35  90496.62  90593.35
+    ## result.5 101323.76 106612.74 115366.66 116829.56 119274.54 120155.62 124241.85
+    ## result.6  97717.71  98826.47  94556.50  92998.58  94664.22  95293.47  95674.92
     ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1  97957.59  94118.30  96174.78  94048.55  96066.04  94240.06  95064.17
-    ## result.2  98401.64 100180.97  99560.56 100839.34 101917.75 100212.10  99464.40
-    ## result.3  76276.70  75575.89  76284.24  77073.80  76704.64  73199.90  73837.39
-    ## result.4 101057.37 100035.98 101782.30 103183.13 102230.71 106098.71 108386.11
-    ## result.5 103153.93 104939.49 103840.70 103448.66 104230.65 105205.07 105022.88
-    ## result.6 106829.09 105047.52 105036.06 103329.08 103184.10 100854.69 101602.19
+    ## result.1  96682.15  98181.44  95509.67  96472.28  95889.50  95843.94  95705.71
+    ## result.2  94382.23  94263.09  92022.68  92868.95  95132.61  94096.35  96367.74
+    ## result.3  95717.31  96232.30  95801.22  95386.34  95862.71  98860.27  98584.23
+    ## result.4  93522.11  94294.74  91421.69  91314.56  92036.07  92309.86  93527.20
+    ## result.5 124196.91 125108.23 126995.54 128216.26 129046.22 130127.21 132097.78
+    ## result.6  97649.97  98411.84  97276.80  97926.77  98369.41  99063.10  98142.79
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1  95349.17  99361.42  98820.01  97753.82  98239.54  98829.28
-    ## result.2 101116.24 101580.93 100862.11 108033.45 113069.02 114095.38
-    ## result.3  75137.33  75163.91  73592.04  72160.55  72922.39  72757.59
-    ## result.4 105849.69 105947.93 106268.69 102996.34 102985.40 102932.65
-    ## result.5 105169.33 103640.21 102292.10  99570.22 100500.45 102248.21
-    ## result.6 103081.87 109687.66 109673.73 110071.37 109290.31 108759.12
+    ## result.1  95443.86  95995.57  93948.27  93852.83  93292.39  90678.44
+    ## result.2  95813.44  96530.97  96680.48  97772.44  98349.91  98726.88
+    ## result.3  98890.52  97918.76  98071.05  93666.18  95215.38  96221.04
+    ## result.4  91668.47  93958.41  94609.74  92329.95  92793.49  93660.58
+    ## result.5 143466.09 143686.82 142667.73 139946.03 143672.09 142948.37
+    ## result.6  98547.59  95823.71  97018.87  98476.82  98131.81  95040.01
 
 ![](Solutions_files/figure-markdown_github/5f-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100315.1
+    ## [1] 100418.7
 
-    ## [1] 315.0719
+    ## [1] 418.7201
 
 ![](Solutions_files/figure-markdown_github/5g-1.png)
 
     ##        5% 
-    ## -17375.57
+    ## -16059.34
 
 So this is our ultimate gain/loss, which can vary from time to time.
 
@@ -488,16 +593,16 @@ capital equally and then find the sum to compute our new total wealth at
 the end of a random day.
 
     ##            ClCl.VTOa ClCl.IEMGa ClCl.GEMa ClCl.DEMa ClCl.PXHa
-    ## 2018-01-30  19930.72   19737.82  19696.42  19717.63  19783.13
+    ## 2018-08-29  20405.41   20094.45  20120.34  20067.86  20150.23
 
-    ## [1] 98865.72
+    ## [1] 100838.3
 
 So as we can see on a random day we went from $100,000 in capital to
 output \[1\]. This amount varies from day to day.
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 97120.64
+    ## [1] 110823.5
 
 ![](Solutions_files/figure-markdown_github/5l-1.png)
 
@@ -506,40 +611,40 @@ So we can see the change in our capital over the time of 20 days.
 So now we bootstrap this model.
 
     ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]     [,7]
-    ## result.1 100879.74 100302.43 102114.88 102175.57 102347.72 101852.97 101090.1
-    ## result.2  99621.20  98511.37  96428.64  99605.77 100010.05 100338.81 102165.8
-    ## result.3 100838.28 100729.58  99597.36  99423.16  98996.85 100441.49 100325.7
-    ## result.4  98640.46  98738.57 100806.60 100751.71 101258.87 101715.70 102940.3
-    ## result.5 101110.57 101729.31 100824.33 100899.70 100891.01 100393.33 100042.4
-    ## result.6 100283.16  99864.86 100835.25  99505.46  99394.33  99747.64 100410.7
-    ##              [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1 101653.2 100155.37 100044.03 100874.09  99294.21  99582.28  99831.87
-    ## result.2 103015.0 103483.41 103384.54 102785.62 102484.41 103366.09 103708.26
-    ## result.3 101012.1  99463.79  97737.14  99381.10  99930.08 100751.26  99013.74
-    ## result.4 102637.6 102625.20 104804.70 109607.04 110486.16 111760.18 110405.71
-    ## result.5 100566.4 102182.28 103108.34 103649.03 103212.87 102928.09 104275.78
-    ## result.6 100090.7 100778.37 100277.94  99801.74 100616.31 100919.21 100657.82
+    ## result.1  98389.51  98624.63  99302.27  99977.46 100798.16 100459.11 103824.8
+    ## result.2  98965.66 100262.02 100139.96 102444.09 102165.18 100057.63 100152.8
+    ## result.3  99690.38  99282.53  99688.70  98952.61  99184.91 100407.19 100761.7
+    ## result.4  99377.45  99082.26  98775.33 100183.24 100332.52 101584.51 100469.0
+    ## result.5 100287.10 100068.61 100753.78 101081.13 102109.15 101619.41 102283.9
+    ## result.6  98995.12  98131.28  98826.96  96858.78  97409.07  99661.47 100161.8
+    ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
+    ## result.1 103916.71 104301.04 103408.50 104335.61 103044.86 103735.77 104479.06
+    ## result.2  98903.94  99699.30  99091.34  99688.90  98793.42  98139.34  98658.50
+    ## result.3  99999.77  98593.48  96895.31  97340.28  96356.92  96979.91  97913.01
+    ## result.4  99895.91 101778.33 102066.87 102761.64 103070.71 105350.54 101947.23
+    ## result.5 102315.14 102576.27 102016.93 104271.96 104951.57 104468.18 103120.97
+    ## result.6 100272.70  99830.61 100909.07 100786.35 101107.45 101827.62 102723.11
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1  99311.63  99849.15  99298.09  98730.38  98770.87  98477.92
-    ## result.2 106032.45 107622.89 107630.67 107392.24 106927.99 109019.82
-    ## result.3  98765.86  97738.20  97309.31 101209.38 101352.83 101454.06
-    ## result.4 112180.00 111613.13 111916.02 112310.38 111854.71 111112.13
-    ## result.5 103446.82 102711.02 103621.66 104388.71 104879.89 105003.28
-    ## result.6 102082.40 102957.47 103392.33 104385.63 103416.95 103809.48
+    ## result.1 103105.17 104343.02 103638.63 103858.09 103548.31 105564.18
+    ## result.2  98354.18  98274.67  97820.87  98390.99  97924.32  97426.16
+    ## result.3  97896.34  97489.48  96994.71  97475.77  98311.97  97785.61
+    ## result.4 102032.95  93950.59  93701.81  94052.28  94087.69  94334.86
+    ## result.5 103537.30 104313.63 102755.61 102681.40 103320.06 102735.31
+    ## result.6 101785.22 103182.51 103426.58 103329.63 103378.96 104214.63
 
 ![](Solutions_files/figure-markdown_github/5m-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100620.3
+    ## [1] 100613.8
 
-    ## [1] 620.2815
+    ## [1] 613.8365
 
 ![](Solutions_files/figure-markdown_github/5n-1.png)
 
     ##        5% 
-    ## -8268.217
+    ## -7672.874
 
 So our ultimate gain/loss would be output \[1\]. This could vary due to
 randomization in bootstrapping.
@@ -580,16 +685,16 @@ capital equally and then find the sum to compute our new total wealth at
 the end of a random day.
 
     ##            ClCl.XHEa ClCl.PSCHa ClCl.IHEa ClCl.PBEa ClCl.FHLCa
-    ## 2019-09-18  19895.91   19813.46  19958.15  19841.49   19981.94
+    ## 2020-06-17  20066.71   19797.42  19896.45  20194.28   19967.74
 
-    ## [1] 99490.95
+    ## [1] 99922.6
 
 So as we can see on a random day we went from $100,000 in capital to
 output\[1\].
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 103132.6
+    ## [1] 93398.38
 
 ![](Solutions_files/figure-markdown_github/5s-1.png)
 
@@ -598,40 +703,40 @@ So we can see the change in our capital over the time of 20 days.
 So now we bootstrap this model.
 
     ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
-    ## result.1 101170.90 102376.32 101267.84 101232.69 100463.49  98817.79  98501.97
-    ## result.2 100754.33 100529.95 101454.61 101004.24 100560.80 102237.59 102954.21
-    ## result.3  98769.14  98787.17  98713.86 100007.76 100537.62  99382.25  98973.98
-    ## result.4 100036.41  99133.16  98946.84  99141.25 100478.24  99712.14 100154.99
-    ## result.5 100650.15 100832.65 100271.79 100084.33  99915.32 100330.08  99071.88
-    ## result.6  99733.52 101528.92 100903.79 100059.15 100550.14  98619.44  98276.34
+    ## result.1 100199.97  99338.86  97789.26  97808.80  96866.36  98453.95  98856.89
+    ## result.2  99214.74  98790.16  98142.52  98383.23  98510.11  98652.35  96520.71
+    ## result.3 100469.57 101279.67 101723.81 102688.01 104265.07 104573.35 103970.06
+    ## result.4  99470.89 100829.30 100577.58 101563.50 102707.62 101208.10 100915.28
+    ## result.5  99963.45  99452.24 101069.25  98446.55 100399.23 102410.47 102062.96
+    ## result.6 100128.73 100606.62  99627.31  99500.04 100221.83 100465.22 101633.55
     ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1  98740.87  99726.21 100739.46  97160.60  97085.67  97087.63  96437.00
-    ## result.2 103110.75 103422.53 103113.02 103232.60 104125.73 102201.03 102504.79
-    ## result.3  96967.37  94138.43  95245.00  95501.88  96392.53  94970.99  96929.23
-    ## result.4 101368.26  99802.41  99996.45 100624.05  99592.84 100447.22 100855.97
-    ## result.5  96730.02  94232.51  95733.61  98479.14  98791.74  99093.13 100242.70
-    ## result.6  96428.04  97346.66  97793.29  96676.89  96278.15  96293.14  93890.13
+    ## result.1  99563.56  99007.09  98476.37  99161.64  94956.40  95019.17  94936.22
+    ## result.2  98643.49  98873.77  99217.98  98096.62  95496.51  95902.47  96546.29
+    ## result.3 102497.88 101037.41 102797.38 103868.25 103760.03 103861.96 101283.59
+    ## result.4 101673.22 102671.66 102424.22 100998.53  98194.39  98328.69  96997.50
+    ## result.5 103368.23 103622.44 105117.59 110217.88 111688.27 110408.59 109164.44
+    ## result.6 102238.61 101487.84 101060.83  98675.31  98374.35  96183.39  98118.27
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1  96223.17  97235.42  96410.03  97487.84  98153.43  98784.70
-    ## result.2 103375.44 102195.68 101477.57 102345.73 110425.33 110988.62
-    ## result.3  96307.23  98244.74  99819.46 102805.25 102309.38 100243.97
-    ## result.4 101181.99 103374.29 104374.73 105257.36 104839.10 104120.64
-    ## result.5 101046.75  99803.87 102605.93 103518.72 104675.44 105194.99
-    ## result.6  94079.01  91718.11  92724.94  91619.47  93088.55  93315.85
+    ## result.1  95919.74  95661.90  95826.90  94673.28  95219.75  92426.84
+    ## result.2  96810.77  96368.11  94533.75  94854.01  95799.80  94438.68
+    ## result.3 100659.83 102233.28 103199.49 102239.17 103333.73 103042.63
+    ## result.4  98123.67  98684.35  99189.26  99006.56  99186.14  97893.64
+    ## result.5 109093.83 109674.64 111818.63 112345.50 113644.71 113031.76
+    ## result.6  97378.88  99791.52  99422.36 100445.11 100376.95  99717.60
 
 ![](Solutions_files/figure-markdown_github/5t-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100995.3
+    ## [1] 101055.2
 
-    ## [1] 995.2554
+    ## [1] 1055.206
 
 ![](Solutions_files/figure-markdown_github/5u-1.png)
 
     ##        5% 
-    ## -8668.667
+    ## -9082.706
 
 So our ultimate gain/loss would be output \[1\]. However, this could
 change due to randomization in bootstrapping.
@@ -1013,7 +1118,7 @@ km$cluster
 ``` r
 #plot(wine, col = (km$cluster + 1), main = "K-Means Clustering Results with K =2", xlab = "", ylab = "", pch = 20, cex =2)
 
-# get cluster means 
+# get cluster means
 aggregate(wine ,by=list(km$cluster), FUN=mean)
 ```
 
@@ -1406,7 +1511,7 @@ and test datasets.
 file_lists = append(file_list_train,file_list_test)
 labels = NULL
 labels <- unique(append(labels_train, labels_test))
-all_docs = lapply(file_lists, readerPlain) 
+all_docs = lapply(file_lists, readerPlain)
 names(all_docs) = file_lists
 names(all_docs) = sub('.txt', '', names(all_docs))
 my_corpus = Corpus(VectorSource(all_docs))
@@ -1537,7 +1642,7 @@ the most probable author for that document.
 ``` r
 X_test =  X[2501:5000,]
 
-pred = matrix(, nrow = 2500, ncol = 51) 
+pred = matrix(, nrow = 2500, ncol = 51)
 for(i in 1:2500)
 {
   for(j in 1:50)
@@ -1858,19 +1963,19 @@ verify this.
 actual_author = rep(rep(1:50,each=50),2)
 author = as.data.frame(X)
 colnames(author) = make.names(colnames(author))
-author$actual_author=actual_author 
+author$actual_author=actual_author
 author$actual_author=as.factor(author$actual_author)
 
 # SPLIT DATA
 # The data was split into the training and test datasets.
-# A seed was also set so this code can be replicated. 
+# A seed was also set so this code can be replicated.
 
 author_train=author[1:2500,]
 author_test=author[2501:5000,]
 set.seed(23432)
-rf_author=randomForest(actual_author~.,data=author_train) 
+rf_author=randomForest(actual_author~.,data=author_train)
 
-predicted_author=predict(rf_author,newdata=author_test) 
+predicted_author=predict(rf_author,newdata=author_test)
 confusionMatrix(predicted_author,author_test$actual_author)
 ```
 
@@ -2171,11 +2276,11 @@ my_documents = text_data_preprocess('./Data/ReutersC50/C50train/')
     ## transformation drops documents
 
 ``` r
-y = get_y('./Data/ReutersC50/C50train/') 
+y = get_y('./Data/ReutersC50/C50train/')
 DTM_all = DocumentTermMatrix(my_documents)
 DTM_all_d = removeSparseTerms(DTM_all, 0.95)
 DTM_all_s = DTM_all_d[ ,order(DTM_all_d$dimnames$Terms)]
-tfidf_all = weightTfIdf(DTM_all_d) 
+tfidf_all = weightTfIdf(DTM_all_d)
 tfidf_matrix = as.matrix(tfidf_all)
 scrub_cols = which(colSums(tfidf_matrix) == 0)
 pre_pca_1 = tfidf_matrix[,-scrub_cols]
@@ -2205,7 +2310,7 @@ test_documents = text_data_preprocess('./Data/ReutersC50/C50test/')
 
 ``` r
 y_test = get_y('./Data//ReutersC50/C50test')
-DTM_test = DocumentTermMatrix(test_documents) 
+DTM_test = DocumentTermMatrix(test_documents)
 DTM_test_s = DTM_test[, order(DTM_test$dimnames$Terms)]
 Term_inter = intersect(Terms(DTM_test_s), colnames(pre_pca_1))
 ```
@@ -2234,7 +2339,7 @@ mycorpus = text_data_preprocess('./Data/ReutersC50/C50train/')
 
 ``` r
 labels = get_y('./Data/ReutersC50/C50train/')
-DTM = DocumentTermMatrix(mycorpus) 
+DTM = DocumentTermMatrix(mycorpus)
 DTM = removeSparseTerms(DTM, 0.975)
 tfidf_train = weightTfIdf(DTM)
 X = as.matrix(tfidf_train)
@@ -2259,25 +2364,25 @@ mycorpus2 = text_data_preprocess('./Data/ReutersC50/C50test/')
 
 ``` r
 labels2 = get_y('./Data/ReutersC50/C50test/')
-DTM2=DocumentTermMatrix(mycorpus2) 
-DTM2=removeSparseTerms(DTM2,0.975) 
+DTM2=DocumentTermMatrix(mycorpus2)
+DTM2=removeSparseTerms(DTM2,0.975)
 tfidf_test = weightTfIdf(DTM2)
 x2=as.matrix(tfidf_test)
 
 words=colnames(X)
 words2=colnames(x2)
-W=words[!(words %in% words2)] 
+W=words[!(words %in% words2)]
 W2=words2[!(words2 %in% words)]
-words_matrix=matrix(0,nrow=nrow(x2), ncol=length(W)) 
+words_matrix=matrix(0,nrow=nrow(x2), ncol=length(W))
 colnames(words_matrix)=W
-words_matrix2=matrix(0,nrow=nrow(X), ncol=length(W2)) 
+words_matrix2=matrix(0,nrow=nrow(X), ncol=length(W2))
 colnames(words_matrix2)=W2
 train_matrix=cbind(X,words_matrix2)
 test_matrix=cbind(x2,words_matrix)
 
 # check the test accuracy
 set.seed(1)
-test_matrix=as.data.frame(test_matrix) 
+test_matrix=as.data.frame(test_matrix)
 train_matrix=as.data.frame(train_matrix)
 nb = naive_bayes(x=train_matrix,y=as.factor(labels),laplace=1)
 predNB=predict(nb,test_matrix)
@@ -2294,7 +2399,7 @@ print(NB_accuracy)
     ## [1] 0.4396
 
 ``` r
-NB_confusion = confusionMatrix(table(predNB,labels)) 
+NB_confusion = confusionMatrix(table(predNB,labels))
 NB_class= as.data.frame(NB_confusion$byClass)
 NB_class[order(-NB_class$Sensitivity),][1]
 ```
@@ -2360,13 +2465,13 @@ To further improve our accuracy, we tried the random forest model.
 
 ``` r
 set.seed(1)
-RF = randomForest(y=as.factor(labels), x=train_matrix,ntrees=500) 
+RF = randomForest(y=as.factor(labels), x=train_matrix,ntrees=500)
 pr = predict(RF, test_matrix, type = "response")
 TestTable2 = table(pr, actual)
 correct2 = 0
 for (i in seq(1,50)){
   correct2 = correct2 + TestTable2[i,i] }
-RF_accuracy = correct2/2500 
+RF_accuracy = correct2/2500
 print(RF_accuracy)
 ```
 
@@ -2376,7 +2481,7 @@ print(RF_accuracy)
 # he random forest model was a good bit better at 0.6212
 
 RF_confusion = confusionMatrix(table(pr,labels))
-RF_class= as.data.frame(RF_confusion$byClass) 
+RF_class= as.data.frame(RF_confusion$byClass)
 RF_class[order(-RF_class$Sensitivity),][1]
 ```
 
@@ -2754,7 +2859,7 @@ arules::inspect(grocery_rules)
 
 ``` r
 library(arulesViz)
-plot(grocery_rules, method = "graph", 
+plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
@@ -2810,7 +2915,7 @@ grocery_rules= apriori(grocery_trans, parameter=list(support=.005, confidence=.5
     ## creating S4 object  ... done [0.00s].
 
 ``` r
-arules::inspect(grocery_rules)     
+arules::inspect(grocery_rules)
 ```
 
     ##       lhs                            rhs                    support confidence    coverage     lift count
@@ -3076,7 +3181,7 @@ arules::inspect(grocery_rules)
     ##        yogurt}                    => {whole milk}       0.005998983  0.5221239 0.011489578 2.043410    59
 
 ``` r
-plot(grocery_rules, method = "graph", 
+plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
@@ -3088,7 +3193,7 @@ plot(grocery_rules, method = "graph",
 The above model gave 120 results. So we’re not including the output.
 
 ``` r
-grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.8, 
+grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.8,
                                                  maxlen=4))
 ```
 
@@ -3141,11 +3246,11 @@ arules::inspect(grocery_rules)
     ##      other vegetables,                                                                         
     ##      pork}              => {whole milk}       0.002236909  0.8461538 0.002643620 3.311549    22
 
-Again, nothing new. All that we would expect. I am decreasing the
+Again, nothing new. All that we would expect. We are decreasing the
 support even further and increasing the maxlen to 5
 
 ``` r
-grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015, 
+grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015,
                                                  confidence=.9, maxlen=5))
 ```
 
@@ -3205,7 +3310,7 @@ arules::inspect(grocery_rules)
     ##      yogurt}                 => {whole milk}       0.001525165  0.9375000 0.001626843  3.669046    15
 
 ``` r
-plot(grocery_rules, method = "graph", 
+plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 

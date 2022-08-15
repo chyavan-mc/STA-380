@@ -4,6 +4,19 @@ output:
     variant: markdown_github
 ---
 
+``` {r, include=FALSE}
+# Install all packages required for the assignment
+
+# install.packages(
+#     c("lubridate", "reshape2", "zoo", "mosaic", "quantmod", "foreach",
+#         "factoextra", "cluster", "ggplot2", "ggcorrplot", "e1071",
+#         "randomForest", "tm", "magrittr", "slam", "proxy", "glmnet",
+#         "dplyr", "naivebayes", "caret", "readr", "tidyverse", "arules",
+#         "arulesViz", "reshape"
+#     )
+# )
+```
+
 # 1. Probability practice
 
 ## Part. A
@@ -14,18 +27,18 @@ Visitors to your website are asked to answer a single survey question before the
 > $P(N) = 0.35 \rightarrow$ Marginal probability of a clicker saying No <br>
 > $P(R_{c}) = 0.3 \rightarrow$ Probability of a clicker being a random clicker <br>
 > $P(T_{c}) = 0.7 \rightarrow$ Probability of a clicker being a truthful clicker <br>
-> 
+>
 > To find the fraction of people truthful clickers who answered yes, we find the value of $P(Y|T_{c})$
-> 
+>
 > We know that, <br>
 >   $P(Y) = P(Y|R_{c}) + P(Y|T_{c})$
-> 
+>
 > Rearranging, <br>
 >   $P(Y|T_{c}) = P(Y) - P(Y|R_{c})$
-> 
+>
 > If a random clicker clicking *Yes* or *No* is equally likely, then the probability (or fraction) of Random clickers, clicking yes > is (Fraction of users among the 0.3 random clickers, clicking *Yes*), <br>
 >   $P(Y|R_{c}) = 0.5*0.3 = 0.15$
-> 
+>
 > Substituting in the rearranged equation, <br>
 >   $P(Y|T_{c}) = 0.65 - 0.15$ <br>
 >   $P(Y|T_{c}) = 0.5$
@@ -33,7 +46,7 @@ Visitors to your website are asked to answer a single survey question before the
 > Therefore, the fraction of clickers among truthful clickers who clicked yes would be **0.5**
 
 ## Part. B
-Imagine a medical test for a disease with the following two attributes:  
+Imagine a medical test for a disease with the following two attributes:
 
 - The sensitivity is about 0.993. That is, if someone has the disease, there is a probability of 0.993 that they will test positive.
 - The specificity is about 0.9999. This means that if someone doesn't have the disease, there is probability of 0.9999 that they will test negative.
@@ -46,10 +59,10 @@ Suppose someone tests positive. What is the probability that they have the disea
 >   $P(T_{n}|D_{c}) = 0.9999 \rightarrow$ Probability of testing negative given a person doesn't have the disease <br>
 >   $P(D) = 0.000025 \rightarrow$ Probability of a person having the disease <br>
 >   $P(D_{c}) = 1- P(D) = 0.999975$ \rightarrow Probability of a person not having the disease <br>
-> 
+>
 > We'll find the probability of testing positive, given a person doesn't have the disease, i.e.
 >   $P(T_{p}|D_{c}) = 1 - P(T_{n}|D_{c}) = 1 - 0.9999 = 0.0001$
-> 
+>
 > Probability of having the disease given that someone tested positive <br>
 >   $P(D|T_{p}) = \frac{P(T_{p}|D)*P(D)}{P(T_{p})}$ <br>
 >   $P(D|T_{p}) = \frac{P(T_{p}|D)*P(D)}{P(T_{p}|D)*P(D) + P(T_{p}|D_{c})*P(D_{c})}$ <br>
@@ -77,11 +90,11 @@ head(billboard)
 
 ## Part. A
 
-Make a table of the top 10 most popular songs since 1958, as measured by the _total number of weeks that a song spent on the Billboard Top 100._  Note that these data end in week 22 of 2021, so the most popular songs of 2021 will not have up-to-the-minute data; please send our apologies to The Weeknd.    
+Make a table of the top 10 most popular songs since 1958, as measured by the _total number of weeks that a song spent on the Billboard Top 100._  Note that these data end in week 22 of 2021, so the most popular songs of 2021 will not have up-to-the-minute data; please send our apologies to The Weeknd.
 
-Your table should have __10 rows__ and __3 columns__: `performer`, `song`, and `count`, where `count` represents the number of weeks that song appeared in the Billboard Top 100.  Make sure the entries are sorted in descending order of the `count` variable, so that the more popular songs appear at the top of the table.  Give your table a short caption describing what is shown in the table.  
+Your table should have __10 rows__ and __3 columns__: `performer`, `song`, and `count`, where `count` represents the number of weeks that song appeared in the Billboard Top 100.  Make sure the entries are sorted in descending order of the `count` variable, so that the more popular songs appear at the top of the table.  Give your table a short caption describing what is shown in the table.
 
-(_Note_: you'll want to use both `performer` and `song` in any `group_by` operations, to account for the fact that multiple unique songs can share the same title.)  
+(_Note_: you'll want to use both `performer` and `song` in any `group_by` operations, to account for the fact that multiple unique songs can share the same title.)
 
 ``` {r 2a, warnings=FALSE}
 top_songs_by_week = billboard %>% group_by(song, performer) %>% summarize(count = n())
@@ -95,13 +108,13 @@ knitr::kable(top10_songs_by_week,
 
 Is the "musical diversity" of the Billboard Top 100 changing over time?  Let's find out.  We'll measure the musical diversity of given year as _the number of unique songs that appeared in the Billboard Top 100 that year._  Make a line graph that plots this measure of musical diversity over the years.  The x axis should show the year, while the y axis should show the number of unique songs appearing at any position on the Billboard Top 100 chart in any week that year.  For this part, please filter the data set so that it excludes the years 1958 and 2021, since we do not have complete data on either of those years.   Give the figure an informative caption in which you explain what is shown in the figure and comment on any interesting trends you see.
 
-There are number of ways to accomplish the data wrangling here.  We offer you two hints on two possibilities:  
+There are number of ways to accomplish the data wrangling here.  We offer you two hints on two possibilities:
 
 1) You could use two distinct sets of data-wrangling steps.  The first set of steps would get you a table that counts the number of times that a given song appears on the Top 100 in a given year.  The second set of steps operate on the result of the first set of steps; it would count the number of unique songs that appeared on the Top 100 in each year, _irrespective of how many times_ it had appeared.
-2) You could use a single set of data-wrangling steps that combines the `length` and `unique` commands. 
+2) You could use a single set of data-wrangling steps that combines the `length` and `unique` commands.
 
 ``` {r 2b, warnings=FALSE}
-musical_diversity = billboard[,c("performer", "song", "year")] 
+musical_diversity = billboard[,c("performer", "song", "year")]
 musical_diversity = musical_diversity %>% filter(!(year %in% c(2021, 1958)))
 musical_diversity = unique(musical_diversity)
 musical_diversity = musical_diversity %>% group_by(year) %>% summarize(unique=n())
@@ -120,7 +133,7 @@ ggplot(data=musical_diversity, aes(x=year, y=unique, group=1)) +
 
 Let's define a "ten-week hit" as a single song that appeared on the Billboard Top 100 for at least ten weeks.  There are 19 artists in U.S. musical history since 1958 who have had _at least 30 songs_ that were "ten-week hits."  Make a bar plot for these 19 artists, showing how many ten-week hits each one had in their musical career.   Give the plot an informative caption in which you explain what is shown.
 
-_Notes_:  
+_Notes_:
 
 1) You might find this easier to accomplish in two distinct sets of data wrangling steps.
 2) Make sure that the individuals names of the artists are readable in your plot, and that they're not all jumbled together.  If you find that your plot isn't readable with vertical bars, you can add a `coord_flip()` layer to your plot to make the bars (and labels) run horizontally instead.
@@ -196,7 +209,7 @@ comparison$difference = comparison$Rent - comparison$median_rent
 
 cat("Median increase in rent for a green property (among all cluster-wise increases): $", median(comparison$difference), sep=)
 
-ggplot(comparison, aes(x=difference)) + 
+ggplot(comparison, aes(x=difference)) +
   geom_histogram(binwidth=3, color="darkblue", fill="lightblue") +
   geom_vline(xintercept = median(comparison$difference), linetype="dashed",color = "red", size=1) +
   geom_text(aes(x=-3+median(comparison$difference), label="Median Rent Increase", y=35), colour="red", angle=90, text=element_text(size=11)) +
@@ -320,7 +333,7 @@ We have formatted the initial data, where the date and time are now different co
 weekly = capmetro_df %>% group_by(day_of_week) %>% summarize(traffic = mean(traffic), boarding = mean(boarding), alighting = mean(alighting))
 
 ggplot(weekly, aes(x=day_of_week, y=traffic)) +
-  geom_bar(stat = "identity") + 
+  geom_bar(stat = "identity") +
   labs(
     title = "Average traffic over the week",
     x = "Day of the week",
@@ -352,7 +365,7 @@ monthly = capmetro_df %>% filter(weekend == "weekday") %>% group_by(month) %>% s
 
 
 ggplot(monthly, aes(x=month, y=traffic)) +
-  geom_bar(stat = "identity") + 
+  geom_bar(stat = "identity") +
   labs(
     title = "Average traffic over the months on weekdays",
     x = "Month",
@@ -366,7 +379,7 @@ We don't see any drastic changes in the three months for which we have the data.
 ``` {r 4g, echo=FALSE}
 t = capmetro_df %>% filter(weekend == "weekday") %>% group_by(date) %>% summarize(temp_day = mean(temperature), traffic_day = mean(traffic))
 
-# ggplot(t, aes(date, t)) + 
+# ggplot(t, aes(date, t)) +
 #   geom_line(size=1, colour = "#4285f4")
 
 df = melt(t,  id = c('date'), measure = c('temp_day', 'traffic_day'))
@@ -406,13 +419,13 @@ summary(capmetro_df)
 capmetro_df$bin = cut(capmetro_df$temperature, breaks=15)
 
 ggplot(capmetro_df, aes(x=bin, y=traffic)) +
-  geom_bar(stat = "identity") + 
+  geom_bar(stat = "identity") +
   labs(
     title = "Average traffic over the week",
     x = "Day of the week",
     y = "Avg number of people boarding/alighting"
     # subtitle = waiver(),
-  ) + 
+  ) +
   coord_flip()
 ```
 
@@ -422,7 +435,7 @@ There is a correlation between temperature and bus rides. We can see that people
 
 For this question, we decided to do three different tests with different types of ETFs to understand the different gains and losses through bootstrapping.
 
-We first used Oil and Gas commodity ETFs to understand how much we would potentially be gaining or losing if we were to invest in them. 
+We first used Oil and Gas commodity ETFs to understand how much we would potentially be gaining or losing if we were to invest in them.
 
 ```{r 5a, include = FALSE}
 library(mosaic)
@@ -461,7 +474,7 @@ all_returns = cbind( ClCl(USOa),
                      ClCl(RJNa))
 ```
 
-These are the stocks we used for this portfolio: 
+These are the stocks we used for this portfolio:
 
 USO: United States Oil Fund LP
 
@@ -478,7 +491,7 @@ head(all_returns)
 all_returns = as.matrix(na.omit(all_returns))
 ```
 
-From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today. 
+From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today.
 
 We then made a pairs plot to see each ETF against each other.
 
@@ -487,7 +500,7 @@ We then made a pairs plot to see each ETF against each other.
 pairs(all_returns)
 ```
 
-We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day. 
+We then simulate a random day to where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day.
 
 ```{r 5d, echo = FALSE}
 # Sample a random return from the empirical joint distribution
@@ -509,7 +522,7 @@ total_wealth
 
 So as we can see on a random day we went from $100,000 in capital to the output.
 
-We then observed the change over a time period of two weeks. 
+We then observed the change over a time period of two weeks.
 
 ```{r 5e, echo = FALSE}
 # Now loop over two trading weeks
@@ -577,7 +590,7 @@ quantile(sim1[,n_days]- initial_wealth, prob=0.05)
 # express VaR as a positive number (e.g. 500)
 ```
 
-So this is our ultimate gain/loss, which can vary from time to time. 
+So this is our ultimate gain/loss, which can vary from time to time.
 
 Our next portfolio is emerging market equities, which can be important for people who are interested in investing in new markets which can be relatively risky.
 
@@ -618,7 +631,7 @@ all_returns = cbind( ClCl(VTOa),
                      ClCl(PXHa))
 ```
 
-These are the stocks we used for this portfolio: 
+These are the stocks we used for this portfolio:
 
 VTO: Vanguard FTSE Emerging Markets ETF
 
@@ -635,7 +648,7 @@ head(all_returns)
 all_returns = as.matrix(na.omit(all_returns))
 ```
 
-From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today. 
+From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today.
 
 We then made a pairs plot to see each ETF against each other
 
@@ -644,7 +657,7 @@ We then made a pairs plot to see each ETF against each other
 pairs(all_returns)
 ```
 
-We then simulate a random day where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day. 
+We then simulate a random day where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day.
 
 ```{r 5k, echo = FALSE}
 # Sample a random return from the empirical joint distribution
@@ -666,7 +679,7 @@ total_wealth
 
 So as we can see on a random day we went from $100,000 in capital to output [1]. This amount varies from day to day.
 
-We then observed the change over a time period of two weeks. 
+We then observed the change over a time period of two weeks.
 
 ```{r 5l, echo = FALSE}
 # Now loop over two trading weeks
@@ -719,7 +732,7 @@ head(sim1)
 hist(sim1[,n_days], 25)
 ```
 
-So we can see the distribution of capital after bootstrapping. It is mostly normal. 
+So we can see the distribution of capital after bootstrapping. It is mostly normal.
 
 ```{r 5n, echo = FALSE}
 # Profit/loss
@@ -734,9 +747,9 @@ quantile(sim1[,n_days]- initial_wealth, prob=0.05)
 # express VaR as a positive number (e.g. 500)
 ```
 
-So our ultimate gain/loss would be output [1]. This could vary due to randomization in bootstrapping. 
+So our ultimate gain/loss would be output [1]. This could vary due to randomization in bootstrapping.
 
-The last portfolio we used is with Health and Biotech Equities, which is slightly less common but still has a large capital. 
+The last portfolio we used is with Health and Biotech Equities, which is slightly less common but still has a large capital.
 
 ```{r 5o, include = FALSE}
 library(mosaic)
@@ -775,7 +788,7 @@ all_returns = cbind( ClCl(XHEa),
                      ClCl(FHLCa))
 ```
 
-These are the stocks we used for this portfolio: 
+These are the stocks we used for this portfolio:
 
 XHE: SPDR S&P Health Care Equipment ETF
 
@@ -792,7 +805,7 @@ head(all_returns)
 all_returns = as.matrix(na.omit(all_returns))
 ```
 
-From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today. 
+From the coefficients, we can see the difference in each stock and how they differ from day to day. We started measuring from 5 years back till today.
 
 We then made a pairs plot to see each ETF against each other.
 
@@ -801,7 +814,7 @@ We then made a pairs plot to see each ETF against each other.
 pairs(all_returns)
 ```
 
-We then simulate a random day where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day. 
+We then simulate a random day where we distribute each ETF to our $100K capital equally and then find the sum to compute our new total wealth at the end of a random day.
 
 ```{r 5r, echo = FALSE}
 # Sample a random return from the empirical joint distribution
@@ -821,9 +834,9 @@ total_wealth = sum(holdings)
 total_wealth
 ```
 
-So as we can see on a random day we went from $100,000 in capital to output[1]. 
+So as we can see on a random day we went from $100,000 in capital to output[1].
 
-We then observed the change over a time period of two weeks. 
+We then observed the change over a time period of two weeks.
 
 ```{r 5s, echo = FALSE}
 # Now loop over two trading weeks
@@ -876,7 +889,7 @@ head(sim1)
 hist(sim1[,n_days], 25)
 ```
 
-So we can see the distribution of capital after bootstrapping. It is mostly normal. 
+So we can see the distribution of capital after bootstrapping. It is mostly normal.
 
 ```{r 5u, echo = FALSE}
 # Profit/loss
@@ -893,7 +906,7 @@ quantile(sim1[,n_days]- initial_wealth, prob=0.05)
 
 So our ultimate gain/loss would be output [1]. However, this could change due to randomization in bootstrapping.
 
-When we compare all three, we can see which portfolio is better to invest in, as it gains more capital or loses the least. 
+When we compare all three, we can see which portfolio is better to invest in, as it gains more capital or loses the least.
 
 
 # 6. Clustering and PCA
@@ -943,7 +956,7 @@ km <- kmeans(wine, centers = 2)
 km$cluster
 #plot(wine, col = (km$cluster + 1), main = "K-Means Clustering Results with K =2", xlab = "", ylab = "", pch = 20, cex =2)
 
-# get cluster means 
+# get cluster means
 aggregate(wine ,by=list(km$cluster), FUN=mean)
 
 # append cluster assignment
@@ -955,17 +968,17 @@ clusplot(mydata, fit$cluster, color=TRUE, shade=TRUE,
    labels=2, lines=0)
 ```
 
-For this dataset, K Means Clustering was chosen over PCA to analyze different wines and their 11 associated chemical properties. K Means Clustering made more sense for this problem as it will identify groups not explicitly labeled in the data, which is exactly what we were testing. The goal of this unsupervised learning model was to see if these wines can be clustered based on similar properties. The 'color' column was removed because we were trying to create a model that would correctly cluster the wines as red or white. 
+For this dataset, K Means Clustering was chosen over PCA to analyze different wines and their 11 associated chemical properties. K Means Clustering made more sense for this problem as it will identify groups not explicitly labeled in the data, which is exactly what we were testing. The goal of this unsupervised learning model was to see if these wines can be clustered based on similar properties. The 'color' column was removed because we were trying to create a model that would correctly cluster the wines as red or white.
 
-The K Means Clustering model did correctly cluster some of the red and white wines, but it was not 100% accurate. To test how well our K Means Clustering model was at classifying red vs white wines, we added back the color column and studied if all the red wines and white wines were assigned the same cluster. It appeared that the red wines were correctly classified, but several of the white wines were not. Overall, this model was able to distinguish between red and white wine but did not have perfect accuracy. 
+The K Means Clustering model did correctly cluster some of the red and white wines, but it was not 100% accurate. To test how well our K Means Clustering model was at classifying red vs white wines, we added back the color column and studied if all the red wines and white wines were assigned the same cluster. It appeared that the red wines were correctly classified, but several of the white wines were not. Overall, this model was able to distinguish between red and white wine but did not have perfect accuracy.
 
 Finally, we tested if the K Means Clustering model was able to correctly distinguish between high and low-quality wines. To study this, the clusters column and the quality columns were compared and there did not appear to be any clustering based on quality. For example, a wine rated as a 3 was clustered in the same cluster as wines getting a rating of 6+. Further tests could be run to study why this was occurring.
 
 # 7. Market Segmentation
 
-The social marketing data set consists of users and their different tweets categorized into 35 main topics. Our goal was to define a "market segment" using this data set. We initially took a look at the data and decided which type of analysis was to fit best to define the market segment. 
+The social marketing data set consists of users and their different tweets categorized into 35 main topics. Our goal was to define a "market segment" using this data set. We initially took a look at the data and decided which type of analysis was to fit best to define the market segment.
 
-Since there were likely to be groups of different types of tweets, we decided to take a look at hierarchical clustering, however this did not end with favorable results, as there are too many splits on the decision tree and whichever k we chose was leading to an uneven distribution. Even with a K++ cluster we ended up with very high numbers, and decided to move to the next type of analysis. 
+Since there were likely to be groups of different types of tweets, we decided to take a look at hierarchical clustering, however this did not end with favorable results, as there are too many splits on the decision tree and whichever k we chose was leading to an uneven distribution. Even with a K++ cluster we ended up with very high numbers, and decided to move to the next type of analysis.
 
 ```{r 7a, include = FALSE}
 library(tidyverse)
@@ -978,23 +991,23 @@ social_marketing <- cbind(User = rownames(social_marketing), social_marketing)
 rownames(social_marketing) <- 1:nrow(social_marketing)
 
 social_results = social_marketing %>%
-  group_by(User) %>% 
+  group_by(User) %>%
   select(-User) %>%
   summarize_all(mean) %>%
   column_to_rownames(var="User")
 ```
 
-We then attempted PCA to understand through which factors leads in the most variance of the data set. This split could potentially be defined as the market segment, so we decided to take a look into that. 
+We then attempted PCA to understand through which factors leads in the most variance of the data set. This split could potentially be defined as the market segment, so we decided to take a look into that.
 
 We ran a quick few plots to see the relationship between the User and various categories. In the following graphs we can see the relationship between chatter tweets by the user and travel tweets by the user respectively.
 
 ```{r 7b, echo = FALSE}
-ggplot(rownames_to_column(social_results, "User")) + 
-  geom_col(aes(x=reorder(User, -chatter), y = chatter)) + 
+ggplot(rownames_to_column(social_results, "User")) +
+  geom_col(aes(x=reorder(User, -chatter), y = chatter)) +
   coord_flip()
 
-ggplot(rownames_to_column(social_results, "User")) + 
-  geom_col(aes(x=reorder(User, -travel), y = travel)) + 
+ggplot(rownames_to_column(social_results, "User")) +
+  geom_col(aes(x=reorder(User, -travel), y = travel)) +
   coord_flip()
 ```
 
@@ -1012,10 +1025,10 @@ ggcorrplot::ggcorrplot(cor(social_results), hc.order = TRUE)
 
 Looking through the correlation plot, we can see some variables that have a fairly strong correlation with each other.
 
-Next we took a look at the distribution of variance among the data set. This will then split our PCs so we can observe them individually. 
+Next we took a look at the distribution of variance among the data set. This will then split our PCs so we can observe them individually.
 
 ```{r 7d, echo = FALSE}
-# Now look at PCA of the (average) survey responses.  
+# Now look at PCA of the (average) survey responses.
 PCApilot = prcomp(social_results, scale=TRUE)
 
 ## variance plot
@@ -1031,7 +1044,7 @@ The following table shows the first 10 PCs. We decided to take a look at the fir
 # first few pcs
 # try interpreting the loadings
 # the question to ask is: "which variables does this load heavily on (positive and negatively)?"
-round(PCApilot$rotation[,1:10],2) 
+round(PCApilot$rotation[,1:10],2)
 
 # create a tidy summary of the loadings
 loadings_summary = PCApilot$rotation %>%
@@ -1067,10 +1080,10 @@ loadings_summary %>%
 
 PC3 looks similar to PC2, except that some of the variables have different vectors. We can conclude that this is also similar to recreational or influencer tweets vs serious tweets.
 
-We then made some plots using the PCs that worked. 
+We then made some plots using the PCs that worked.
 
 ```{r 7i, include = FALSE}
-# Let's make some plots of the shows themselves in 
+# Let's make some plots of the shows themselves in
 # PC space, i.e. the space of summary variables we've created
 
 social_marketing <- read.csv("./data/social_marketing.csv", row.names = 1)
@@ -1083,16 +1096,16 @@ social_marketing = rename(social_marketing, social_marketing = Row.names)
 
 # let's plot in PC1 space
 # We might feel good calling PC1 the "quality drama" PC
-ggplot(social_marketing) + 
-  geom_col(aes(x=reorder(social_marketing, PC2), y=PC2)) + 
+ggplot(social_marketing) +
+  geom_col(aes(x=reorder(social_marketing, PC2), y=PC2)) +
   coord_flip()
 
 ```
 
 ```{r 7k, echo = FALSE}
 # looks like a "lighthearted vs serious" PC
-ggplot(social_marketing) + 
-  geom_col(aes(x=reorder(social_marketing, PC3), y=PC3)) + 
+ggplot(social_marketing) +
+  geom_col(aes(x=reorder(social_marketing, PC3), y=PC3)) +
   coord_flip()
 ```
 
@@ -1115,7 +1128,7 @@ plot(travel ~ fitted(lm1), data=social_marketing)
 plot(college_uni ~ fitted(lm2), data=social_marketing)
 ```
 
-After plotting linear models with all 3 PCs, we can see that the main difference in tweets is recreational vs serious. We can use this to define our market segment. In this dataset, the market is separated by the types of tweets that are recreational and serious. It shows the main differences in tweets by users. 
+After plotting linear models with all 3 PCs, we can see that the main difference in tweets is recreational vs serious. We can use this to define our market segment. In this dataset, the market is separated by the types of tweets that are recreational and serious. It shows the main differences in tweets by users.
 
 # 8. The Reuters corpus
 
@@ -1163,7 +1176,7 @@ The training and test sets were combined to deal with the words in the test set 
 file_lists = append(file_list_train,file_list_test)
 labels = NULL
 labels <- unique(append(labels_train, labels_test))
-all_docs = lapply(file_lists, readerPlain) 
+all_docs = lapply(file_lists, readerPlain)
 names(all_docs) = file_lists
 names(all_docs) = sub('.txt', '', names(all_docs))
 my_corpus = Corpus(VectorSource(all_docs))
@@ -1219,7 +1232,7 @@ Now, using the above weight vectors, let us predict the author name of the test 
 ```{r 8h}
 X_test =  X[2501:5000,]
 
-pred = matrix(, nrow = 2500, ncol = 51) 
+pred = matrix(, nrow = 2500, ncol = 51)
 for(i in 1:2500)
 {
   for(j in 1:50)
@@ -1256,19 +1269,19 @@ Let us go ahead and verify that! Below we used the random forest to verify this.
 actual_author = rep(rep(1:50,each=50),2)
 author = as.data.frame(X)
 colnames(author) = make.names(colnames(author))
-author$actual_author=actual_author 
+author$actual_author=actual_author
 author$actual_author=as.factor(author$actual_author)
 
 # SPLIT DATA
 # The data was split into the training and test datasets.
-# A seed was also set so this code can be replicated. 
+# A seed was also set so this code can be replicated.
 
 author_train=author[1:2500,]
 author_test=author[2501:5000,]
 set.seed(23432)
-rf_author=randomForest(actual_author~.,data=author_train) 
+rf_author=randomForest(actual_author~.,data=author_train)
 
-predicted_author=predict(rf_author,newdata=author_test) 
+predicted_author=predict(rf_author,newdata=author_test)
 confusionMatrix(predicted_author,author_test$actual_author)
 ```
 
@@ -1278,39 +1291,37 @@ We wanted to improve our model. So we tried to fit PCA and run the model again.
 
 ```{r 8k, include=FALSE}
 library(tm)
-library(magrittr) 
+library(magrittr)
 library(slam)
 library(proxy)
-#install.packages("glmnet")
 library(glmnet)
-library(caret) 
+library(caret)
 library(dplyr)
 library(naivebayes)
-#install.packages('naivebayes')
 library(randomForest)
-library(e1071) 
+library(e1071)
 library(caret)
 
-text_data_preprocess = function(pp) { 
+text_data_preprocess = function(pp) {
   writer_list = list.files(pp)
   read_f_list = c()
-  
-  readerPlain = function(fname) { 
+
+  readerPlain = function(fname) {
     readPlain(elem=list(content=readLines(fname)),id=fname, language='en') }
-  
-  for ( i in writer_list){ 
+
+  for ( i in writer_list){
     read_f_list = c(read_f_list,Sys.glob(paste0(pp,i,'/*.txt')))
-  }  
-  
+  }
+
   all_Doc = lapply(read_f_list, readerPlain)
   mynames = read_f_list %>%
     { strsplit(., '/', fixed=TRUE) } %>%
     { lapply(., tail, n=2) } %>%
-    { lapply(., paste0, collapse = '') } %>% unlist  
+    { lapply(., paste0, collapse = '') } %>% unlist
   names(all_Doc) = mynames
-  
+
   documents_raw = Corpus(VectorSource(all_Doc))
-  
+
   my_documents = documents_raw
   my_documents = tm_map(my_documents, content_transformer(tolower)) # make everything lowercase
   my_documents = tm_map(my_documents, content_transformer(removeNumbers)) # remove numbers
@@ -1321,12 +1332,12 @@ text_data_preprocess = function(pp) {
 }
 
 get_y = function(pp)
-{ writer_list = list.files(pp) 
+{ writer_list = list.files(pp)
 y = c()
 for ( i in writer_list){
   y = c(y, rep(i, times = length(list.files(paste0(pp,i)))))
 }
-return(y) 
+return(y)
 }
 ```
 
@@ -1334,11 +1345,11 @@ We build our "document term matrix" and prepare for PCA by removing sparse terms
 
 ```{r 8l}
 my_documents = text_data_preprocess('./Data/ReutersC50/C50train/')
-y = get_y('./Data/ReutersC50/C50train/') 
+y = get_y('./Data/ReutersC50/C50train/')
 DTM_all = DocumentTermMatrix(my_documents)
 DTM_all_d = removeSparseTerms(DTM_all, 0.95)
 DTM_all_s = DTM_all_d[ ,order(DTM_all_d$dimnames$Terms)]
-tfidf_all = weightTfIdf(DTM_all_d) 
+tfidf_all = weightTfIdf(DTM_all_d)
 tfidf_matrix = as.matrix(tfidf_all)
 scrub_cols = which(colSums(tfidf_matrix) == 0)
 pre_pca_1 = tfidf_matrix[,-scrub_cols]
@@ -1349,7 +1360,7 @@ We will follow the same process for tests also and intersect the common results 
 ```{r 8m}
 test_documents = text_data_preprocess('./Data/ReutersC50/C50test/')
 y_test = get_y('./Data//ReutersC50/C50test')
-DTM_test = DocumentTermMatrix(test_documents) 
+DTM_test = DocumentTermMatrix(test_documents)
 DTM_test_s = DTM_test[, order(DTM_test$dimnames$Terms)]
 Term_inter = intersect(Terms(DTM_test_s), colnames(pre_pca_1))
 ```
@@ -1359,32 +1370,32 @@ By running PCA using our training document term matrix, using the vocabulary int
 ```{r 8n}
 mycorpus = text_data_preprocess('./Data/ReutersC50/C50train/')
 labels = get_y('./Data/ReutersC50/C50train/')
-DTM = DocumentTermMatrix(mycorpus) 
+DTM = DocumentTermMatrix(mycorpus)
 DTM = removeSparseTerms(DTM, 0.975)
 tfidf_train = weightTfIdf(DTM)
 X = as.matrix(tfidf_train)
 
 mycorpus2 = text_data_preprocess('./Data/ReutersC50/C50test/')
 labels2 = get_y('./Data/ReutersC50/C50test/')
-DTM2=DocumentTermMatrix(mycorpus2) 
-DTM2=removeSparseTerms(DTM2,0.975) 
+DTM2=DocumentTermMatrix(mycorpus2)
+DTM2=removeSparseTerms(DTM2,0.975)
 tfidf_test = weightTfIdf(DTM2)
 x2=as.matrix(tfidf_test)
 
 words=colnames(X)
 words2=colnames(x2)
-W=words[!(words %in% words2)] 
+W=words[!(words %in% words2)]
 W2=words2[!(words2 %in% words)]
-words_matrix=matrix(0,nrow=nrow(x2), ncol=length(W)) 
+words_matrix=matrix(0,nrow=nrow(x2), ncol=length(W))
 colnames(words_matrix)=W
-words_matrix2=matrix(0,nrow=nrow(X), ncol=length(W2)) 
+words_matrix2=matrix(0,nrow=nrow(X), ncol=length(W2))
 colnames(words_matrix2)=W2
 train_matrix=cbind(X,words_matrix2)
 test_matrix=cbind(x2,words_matrix)
 
 # check the test accuracy
 set.seed(1)
-test_matrix=as.data.frame(test_matrix) 
+test_matrix=as.data.frame(test_matrix)
 train_matrix=as.data.frame(train_matrix)
 nb = naive_bayes(x=train_matrix,y=as.factor(labels),laplace=1)
 predNB=predict(nb,test_matrix)
@@ -1397,7 +1408,7 @@ for (i in seq(1,50)){
 NB_accuracy = correct/2500
 print(NB_accuracy)
 
-NB_confusion = confusionMatrix(table(predNB,labels)) 
+NB_confusion = confusionMatrix(table(predNB,labels))
 NB_class= as.data.frame(NB_confusion$byClass)
 NB_class[order(-NB_class$Sensitivity),][1]
 ```
@@ -1408,18 +1419,18 @@ To further improve our accuracy, we tried the random forest model.
 
 ```{r 8o}
 set.seed(1)
-RF = randomForest(y=as.factor(labels), x=train_matrix,ntrees=500) 
+RF = randomForest(y=as.factor(labels), x=train_matrix,ntrees=500)
 pr = predict(RF, test_matrix, type = "response")
 TestTable2 = table(pr, actual)
 correct2 = 0
 for (i in seq(1,50)){
   correct2 = correct2 + TestTable2[i,i] }
-RF_accuracy = correct2/2500 
+RF_accuracy = correct2/2500
 print(RF_accuracy)
 # he random forest model was a good bit better at 0.6212
 
 RF_confusion = confusionMatrix(table(pr,labels))
-RF_class= as.data.frame(RF_confusion$byClass) 
+RF_class= as.data.frame(RF_confusion$byClass)
 RF_class[order(-RF_class$Sensitivity),][1]
 ```
 
@@ -1429,8 +1440,8 @@ The model predicts well for a few authors like FumikoFujisaki, JimGilchrist, and
 
 ```{r 9a, include=FALSE}
 library(readr)
-library(tidyverse) 
-library(arules) 
+library(tidyverse)
+library(arules)
 library(arulesViz)
 library(reshape)
 ```
@@ -1502,7 +1513,7 @@ grocery_rules = apriori(grocery_trans, parameter=list(support=.01, confidence=.5
 arules::inspect(grocery_rules)
 
 library(arulesViz)
-plot(grocery_rules, method = "graph", 
+plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
@@ -1514,28 +1525,28 @@ Now, we should identify more frequent itemsets. To do that we have to play with 
 
 ```{r 9h}
 grocery_rules= apriori(grocery_trans, parameter=list(support=.005, confidence=.5, maxlen=4))
-arules::inspect(grocery_rules)     
+arules::inspect(grocery_rules)
 
-plot(grocery_rules, method = "graph", 
+plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
 The above model gave 120 results. So we're not including the output.
 
 ```{r 9i}
-grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.8, 
+grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.8,
                                                  maxlen=4))
 arules::inspect(grocery_rules)
 ```
 
-Again, nothing new. All that we would expect. I am decreasing the support even further and increasing the maxlen to 5
+Again, nothing new. All that we would expect. We are decreasing the support even further and increasing the maxlen to 5
 
 ```{r 9j}
-grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015, 
+grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015,
                                                  confidence=.9, maxlen=5))
 arules::inspect(grocery_rules)
 
-plot(grocery_rules, method = "graph", 
+plot(grocery_rules, method = "graph",
      measure = "confidence", shading = "lift")
 ```
 
