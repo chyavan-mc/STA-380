@@ -138,7 +138,7 @@ ggplot(data=ten_week_hitters, aes(x=reorder(performer, +count), y=count)) +
 # 3. Visual story telling part 1: Green Buildings
 
 using [greenbuildings.csv](./Data/greenbuildings.csv) <br>
-*\*use raw preview to view the R-code*
+*\*use raw preview (on the Solutions.Rmd) to view the R-code*
 
 ``` {r 3, include=FALSE}
 library(dplyr)
@@ -283,11 +283,139 @@ With this analysis, 7.7 years is still the best case scenario of recuperating th
 # 4. Visual story telling part 2: Capital Metro data
 
 using [capmetro_UT.csv](./Data/capmetro_UT.csv) <br>
-*\*use raw preview to view the R-code*
+*\*use raw preview (on the Solutions.Rmd) to view the R-code*
+
+```{r 4a, include=FALSE}
+library(lubridate)
+library(reshape2)
+library(zoo)
+```
+
+``` {r 4b, echo=FALSE}
+capmetro_df = read.csv("./Data/capmetro_UT.csv")
+
+capmetro_df = capmetro_df %>% mutate(
+  timestamp = ymd_hms(timestamp),
+  date = date(timestamp),
+  year = year(timestamp),
+  month = month(timestamp),
+  day = day(timestamp),
+  hour = hour(timestamp),
+  minute = minute(timestamp),
+  day_of_week = wday(timestamp, label=TRUE)
+)
+
+capmetro_df$traffic = capmetro_df$alighting + capmetro_df$boarding
+
+cols = c("year", "month", "day", "hour", "minute", "date", "day_of_week", "weekend", "temperature", "boarding", "alighting", "traffic")
+capmetro_df = capmetro_df[, cols]
+
+knitr::kable(head(capmetro_df), caption="Initial data of CapMetro")
+```
+
+We have formatted the initial data, where the date and time are now different columns which we can analyze in terms of each day, month, hour, etc. We have also added a new column called traffic, which is the sum of boarding and alighting signifying the foot traffic in the buses in general.
+
+``` {r 4c, echo=FALSE}
+weekly = capmetro_df %>% group_by(day_of_week) %>% summarize(traffic = mean(traffic), boarding = mean(boarding), alighting = mean(alighting))
+
+ggplot(weekly, aes(x=day_of_week, y=traffic)) +
+  geom_bar(stat = "identity") + 
+  labs(
+    title = "Average traffic over the week",
+    x = "Day of the week",
+    y = "Avg number of people boarding/alighting"
+    # subtitle = waiver(),
+  )
+```
+
+From the overall data, we can clearly see that weekdays have significant traffic compared to weekends.
+
+``` {r 4d, echo=FALSE}
+daily = capmetro_df %>% group_by(hour, weekend) %>% summarize(traffic = mean(traffic), boarding = mean(boarding), alighting = mean(alighting))
+
+df = melt(daily,  id = c('hour','weekend'), measure = c('traffic', 'boarding', 'alighting'))
+
+ggplot(df, aes(hour, value, colour = variable)) +
+  geom_line(size = 1) +
+  facet_grid(cols = vars(weekend))
+```
+
+On a particular weekday, we can also see that there are two significant time periods where the traffic is high. Around 8-10 am in the mornings we see that most of the traffic is contributed by the "alighting" passengers meaning buses have more people getting off near the university in the morning. The other peak is around 3-5 pm when most of the students finish their classes, and thus a large percentage of the traffic is contributed by people "boarding" the buses near the university.
+
+We can also see this traffic is significantly high compared to weekends from the second graph.
+
+Let's now see how the traffic varies through the months (Sep 2018 - Nov 2018)
+
+``` {r 4e, echo=FALSE}
+monthly = capmetro_df %>% filter(weekend == "weekday") %>% group_by(month) %>% summarize(traffic = mean(traffic), boarding = mean(boarding), alighting = mean(alighting))
 
 
+ggplot(monthly, aes(x=month, y=traffic)) +
+  geom_bar(stat = "identity") + 
+  labs(
+    title = "Average traffic over the months on weekdays",
+    x = "Month",
+    y = "Avg number of people boarding/alighting"
+    # subtitle = waiver(),
+  )
+```
 
+We don't see any drastic changes in the three months for which we have the data. How does the traffic change over a closer look at the dates? Does the traffic change over the temperatures of the day? Let's take a look.
 
+``` {r 4g, echo=FALSE}
+t = capmetro_df %>% filter(weekend == "weekday") %>% group_by(date) %>% summarize(temp_day = mean(temperature), traffic_day = mean(traffic))
+
+# ggplot(t, aes(date, t)) + 
+#   geom_line(size=1, colour = "#4285f4")
+
+df = melt(t,  id = c('date'), measure = c('temp_day', 'traffic_day'))
+
+ggplot(df, aes(date, value, colour = variable)) +
+  geom_line(size = 1) +
+  facet_grid(rows = vars(variable),scales="free")
+```
+
+There seem to be some outliers in the data where the traffic has steeply fallen. Let's see what those outliers are and see if removing them gives us a more clear trend in the data.
+
+``` {r 4h, echo=FALSE}
+df = capmetro_df %>% filter(weekend == "weekday") %>% group_by(date) %>% summarize(temp_day = mean(temperature), traffic_day = mean(traffic))
+
+z_scores = as.data.frame(sapply(df[,c("traffic_day")], function(df) (abs(df-mean(df))/sd(df))))
+outliers = df[!rowSums(z_scores<3), ]
+outliers
+```
+
+We can see that these dates where the outliers occurred were university holidays. 3rd September was Labor Day, and the three days in November were the Thanksgiving weekend.
+
+``` {r 4i, echo=FALSE}
+no_outliers = df[!rowSums(z_scores>3), ]
+
+df = melt(no_outliers,  id = c('date'), measure = c('temp_day', 'traffic_day'))
+
+ggplot(df, aes(date, value, colour = variable)) +
+  geom_line(size = 1) +
+  facet_grid(rows = vars(variable),scales="free")
+```
+
+We can see an overall decrease in the temperature over the time period of the data from September to November. Along with the decrease in temperature, can we also say there was a decrease in the ridership as it follows a similar trend?
+
+``` {r 4f, echo=FALSE}
+summary(capmetro_df)
+
+capmetro_df$bin = cut(capmetro_df$temperature, breaks=15)
+
+ggplot(capmetro_df, aes(x=bin, y=traffic)) +
+  geom_bar(stat = "identity") + 
+  labs(
+    title = "Average traffic over the week",
+    x = "Day of the week",
+    y = "Avg number of people boarding/alighting"
+    # subtitle = waiver(),
+  ) + 
+  coord_flip()
+```
+
+We can see that people prefer to use public transportation (buses) when the weather is good. As the temperature increases from 29 to 75 degrees, we see a drastic increase in ridership. But at the same time, the ridership also decreases drastically when the temperature goes above 80 degrees, reaching almost zero traffic at high temperatures of 93+ degrees.
 
 # Portfolio Modeling
 
