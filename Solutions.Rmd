@@ -396,7 +396,10 @@ df = capmetro_df %>% filter(weekend == "weekday") %>% group_by(date) %>% summari
 
 z_scores = as.data.frame(sapply(df[,c("traffic_day")], function(df) (abs(df-mean(df))/sd(df))))
 outliers = df[!rowSums(z_scores<3), ]
-outliers
+
+
+knitr::kable(outliers,
+             caption = "Outliers in traffic in the data")
 ```
 
 We can see that these dates where the outliers occurred were university holidays. 3rd September was Labor Day, and the three days in November were the Thanksgiving weekend.
@@ -414,8 +417,6 @@ ggplot(df, aes(date, value, colour = variable)) +
 We can see an overall decrease in the temperature over the time period of the data from September to November. Along with the decrease in temperature, can we also say there was a decrease in the ridership as it follows a similar trend?
 
 ``` {r 4f, echo=FALSE}
-summary(capmetro_df)
-
 capmetro_df$bin = cut(capmetro_df$temperature, breaks=15)
 
 ggplot(capmetro_df, aes(x=bin, y=traffic)) +
