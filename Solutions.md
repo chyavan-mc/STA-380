@@ -23,22 +23,23 @@ truthful clickers answered yes? Hint: use the rule of total probability.
 > find the value of *P*(*Y*\|*T*<sub>*c*</sub>)
 >
 > We know that, <br>
-> *P*(*Y*) = *P*(*Y*\|*R*<sub>*c*</sub>) + *P*(*Y*\|*T*<sub>*c*</sub>)
+> *P*(*Y*) = *P*(*Y*\|*R*<sub>*c*</sub>).*P*(*R*<sub>*c*</sub>) + *P*(*Y*\|*T*<sub>*c*</sub>).*P*(*T*<sub>*c*</sub>)
 >
 > Rearranging, <br>
-> *P*(*Y*\|*T*<sub>*c*</sub>) = *P*(*Y*) − *P*(*Y*\|*R*<sub>*c*</sub>)
+> $P(Y\|T\_{c}) = \frac{ P(Y) - P(Y\|R\_{c}).P(R\_{c}) }{P(T\_{c})}$
 >
 > If a random clicker clicking *Yes* or *No* is equally likely, then the
 > probability (or fraction) of Random clickers, clicking yes \> is
 > (Fraction of users among the 0.3 random clickers, clicking *Yes*),
-> <br> *P*(*Y*\|*R*<sub>*c*</sub>) = 0.5 \* 0.3 = 0.15
+> <br>
+> *P*(*Y*\|*R*<sub>*c*</sub>).*P*(*R*<sub>*c*</sub>) = *P*(*Y*∩*R*<sub>*c*</sub>) = 0.5 \* 0.3 = 0.15
 >
 > Substituting in the rearranged equation, <br>
-> *P*(*Y*\|*T*<sub>*c*</sub>) = 0.65 − 0.15 <br>
-> *P*(*Y*\|*T*<sub>*c*</sub>) = 0.5
+> $P(Y\|T\_{c}) = \frac{0.65 - 0.15}{0.7}$ <br>
+> *P*(*Y*\|*T*<sub>*c*</sub>) = 0.7143
 >
 > Therefore, the fraction of clickers among truthful clickers who
-> clicked yes would be **0.5**
+> clicked yes would be **0.7143**
 
 ## Part. B
 
@@ -477,16 +478,16 @@ $100K capital equally and then find the sum to compute our new total
 wealth at the end of a random day.
 
     ##            ClCl.USOa ClCl.UNGa ClCl.OILKa ClCl.GAZa ClCl.RJNa
-    ## 2021-04-01  20646.44  20250.52    20638.9  20200.33  20406.09
+    ## 2018-01-04  20048.62  19187.82   20144.86     20000  19929.82
 
-    ## [1] 102142.3
+    ## [1] 99311.13
 
 So as we can see on a random day we went from $100,000 in capital to the
 output.
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 108580.6
+    ## [1] 89136.17
 
 ![](Solutions_files/figure-markdown_github/5e-1.png)
 
@@ -495,40 +496,40 @@ So we can see the change in our capital over the time of 20 days.
 So now we bootstrap this model.
 
     ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
-    ## result.1 101808.29 101785.39  98828.47  99548.83  99692.52  99801.02  99549.29
-    ## result.2 100045.72  99322.90 100570.66 101357.61 102474.53 105481.68 107682.10
-    ## result.3 100050.13 100659.60 100436.76 103235.09 101999.01 102369.20 104046.81
-    ## result.4 101504.84 101496.10 101203.75 100463.13 100813.36 100578.94 100064.92
-    ## result.5  99640.78 104848.76 104569.78 104768.20 104762.68 104139.09 105010.67
-    ## result.6  98814.49  99730.43  97932.11  99658.97  99076.46 102565.13 103201.71
-    ##               [,8]      [,9]    [,10]     [,11]    [,12]    [,13]    [,14]
-    ## result.1 100803.58 103367.90 103043.1 104519.19 104631.1 105398.8 109154.3
-    ## result.2 107830.73 107893.20 108543.8 106065.61 106119.2 106101.0 106900.8
-    ## result.3 106052.89 108399.09 112568.1 110490.95 105275.8 104560.5 105604.6
-    ## result.4 100355.11 101754.97 103103.6 101982.29 102683.6 103064.8 102329.8
-    ## result.5 111152.48 110954.61 110556.3 110519.18 105873.2 106786.6 108426.0
-    ## result.6  96884.16  96458.59  98875.8  98939.17 100578.8 100068.0 100836.6
+    ## result.1 100989.40 102100.33 102360.68 102114.07 100530.00 102116.26 101845.80
+    ## result.2 100849.19 100610.43 102317.43 102659.90 104695.37 102995.76 102140.23
+    ## result.3  98526.21  96178.98  93428.07  96118.63  97365.90  96107.42  92910.20
+    ## result.4 101207.14 101357.41 103097.15 102404.62 102438.06 103526.79 103680.58
+    ## result.5 100013.65 101636.12 103396.15 102946.00 103465.55 104633.22 104505.64
+    ## result.6 100381.62 100430.27 100496.29 101030.80  99386.44  99028.49  96227.49
+    ##               [,8]      [,9]    [,10]     [,11]     [,12]     [,13]     [,14]
+    ## result.1 103459.96 104645.22 100487.2  92906.51  91412.11  92057.06  89512.86
+    ## result.2 102781.37 102036.55 102834.1 100625.47  99878.43 100573.82 101892.06
+    ## result.3  91971.84  92421.26  92250.6  92960.33  94130.89  92343.75  92905.43
+    ## result.4 102853.14 101428.12 101687.9  72747.64  72857.11  73765.71  74222.99
+    ## result.5 103014.29 106120.36 106868.1 107190.42 106443.46 105931.99 105379.57
+    ## result.6  96215.88  94978.26 101160.5 102550.97 103522.16 106377.94 105283.09
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1 111549.81 111213.55 112641.87 112116.52 112340.65 114050.07
-    ## result.2 106160.55 106793.98 107106.84 107775.77 107286.37 107961.36
-    ## result.3 107073.31 108525.18 109447.67 108791.49 110962.28 111289.85
-    ## result.4 102137.68 102400.68 101277.26  98221.75  99616.15 100721.42
-    ## result.5  98318.53  97516.12  98087.07  96965.91  95772.41  96393.26
-    ## result.6 102068.15  99790.70  99990.09  99762.98  96070.27  94823.14
+    ## result.1  91090.06  93646.21  94201.86  95119.60  94996.29  95985.08
+    ## result.2 102076.07 102724.75 103453.78 100697.30  97773.06  99993.50
+    ## result.3  92820.57  95151.59  94484.20  94953.78  95563.47  96276.36
+    ## result.4  73358.90  73799.80  74788.87  74802.03  75188.45  71871.48
+    ## result.5 104043.04 102144.35 100705.52  99609.42  98684.32  99774.72
+    ## result.6 104779.26 105171.13 104385.29 103599.42 101880.57 101297.27
 
 ![](Solutions_files/figure-markdown_github/5f-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100573.7
+    ## [1] 100395.9
 
-    ## [1] 573.6578
+    ## [1] 395.8743
 
 ![](Solutions_files/figure-markdown_github/5g-1.png)
 
     ##        5% 
-    ## -16577.25
+    ## -16780.43
 
 So this is our ultimate gain/loss, which can vary from time to time.
 
@@ -569,16 +570,16 @@ capital equally and then find the sum to compute our new total wealth at
 the end of a random day.
 
     ##            ClCl.VTOa ClCl.IEMGa ClCl.GEMa ClCl.DEMa ClCl.PXHa
-    ## 2021-04-09  20834.22   19831.55  19855.25  19842.48  19831.56
+    ## 2021-10-15  19924.24   20250.99  20170.03  20102.66  20200.35
 
-    ## [1] 100195.1
+    ## [1] 100648.3
 
 So as we can see on a random day we went from $100,000 in capital to
 output \[1\]. This amount varies from day to day.
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 96619.27
+    ## [1] 99867.22
 
 ![](Solutions_files/figure-markdown_github/5l-1.png)
 
@@ -586,41 +587,41 @@ So we can see the change in our capital over the time of 20 days.
 
 So now we bootstrap this model.
 
-    ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
-    ## result.1  98554.22  98128.01  98234.84  98176.70  97127.19  98207.35  98561.66
-    ## result.2 100834.10 101449.46 102195.68 100765.33  99633.36  99519.99  99423.39
-    ## result.3 101874.64 101861.63 102304.81 102467.09 104116.18 103008.67 102499.69
-    ## result.4 100460.82 100213.10  99027.44  99001.77  98754.29  97630.51  97026.05
-    ## result.5 100430.22 101800.72 102217.79 103680.91 103926.77 103752.29 105977.03
-    ## result.6  99892.15  99673.65 100418.31 100824.99 101471.65 102113.20  97455.37
+    ##               [,1]      [,2]      [,3]     [,4]      [,5]      [,6]      [,7]
+    ## result.1 100491.29 100642.68 100760.12 102671.0 103132.11 103182.49 101342.30
+    ## result.2  99372.05  99382.29  99892.92 101066.1 101266.12 100963.79  99750.27
+    ## result.3  98332.92  98027.08  96449.08  94707.8  94652.51  95387.62  95968.30
+    ## result.4 101102.95 101721.62 101113.94 100835.5 101432.60 100406.98 100964.53
+    ## result.5 100477.43 101171.34 100791.21 100838.8 100100.92  98830.90  99287.10
+    ## result.6 101347.27 101874.21 101875.70 101785.5 101356.79 101458.29 101498.04
     ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1  97531.65  96073.34  95667.56  95917.66  96227.76  96093.04  97934.11
-    ## result.2 100272.06 100110.90 100710.74 100209.88 100023.85  99572.50  99066.42
-    ## result.3 103210.87 103714.86 103401.93 102966.85 102768.12 103581.35 102409.68
-    ## result.4  98199.88  99444.47  99400.65  99512.62  99850.29  98575.71  98192.49
-    ## result.5 107605.72 109165.65 109428.95 110332.28 110607.59 110889.29 111584.26
-    ## result.6  98530.32  98604.02  98908.84  98374.34  99235.94 100205.59 100817.84
+    ## result.1 101469.20 101328.34 101896.32 102709.97 103778.54 105058.60 106051.00
+    ## result.2  99862.16 100708.48 101581.01 103386.52 102371.01 104136.36 103657.46
+    ## result.3  95529.98  94907.61  94642.96  95635.30  96069.71  95237.51  95180.39
+    ## result.4 102368.54 103197.48 104253.28 102669.77 102319.16 102753.42 104026.78
+    ## result.5  98896.95  99398.40  98392.20  99293.98 100205.47 101045.22 100244.01
+    ## result.6 101212.98 101635.30 101260.90 100007.88  99717.38  99067.60  97506.18
     ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
-    ## result.1  99256.11  99087.64  98464.69  97517.44  97043.69  97286.42
-    ## result.2  99577.84  98737.25  99742.07  98902.29  99234.95 100424.75
-    ## result.3 102701.65 103745.29 103908.06 104454.76 104520.74 102749.56
-    ## result.4  97999.09  98528.89  97369.97  97483.24  97339.62  94936.97
-    ## result.5 112782.10 113440.81 113754.51 114324.59 115505.60 114958.56
-    ## result.6 101367.43 101299.92 101239.97 101699.49 101193.48 106809.53
+    ## result.1 105486.08 105943.69 104836.69 103903.95 103451.62 103694.98
+    ## result.2 103724.97 103838.65 103732.05 104180.59 104100.17 105115.11
+    ## result.3  94654.48  95933.16  96666.36  96988.34  96639.29  97429.17
+    ## result.4 105988.75 107528.39 106124.06 105946.41 107235.24 107190.79
+    ## result.5 100796.01 101765.27 100295.45 100792.24 100928.03 101156.60
+    ## result.6  98825.53  99600.34  99996.77  99864.89  99273.61  98033.50
 
 ![](Solutions_files/figure-markdown_github/5m-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 100586.7
+    ## [1] 100494.8
 
-    ## [1] 586.6699
+    ## [1] 494.8226
 
 ![](Solutions_files/figure-markdown_github/5n-1.png)
 
     ##        5% 
-    ## -7832.953
+    ## -7981.886
 
 So our ultimate gain/loss would be output \[1\]. This could vary due to
 randomization in bootstrapping.
@@ -661,16 +662,16 @@ capital equally and then find the sum to compute our new total wealth at
 the end of a random day.
 
     ##            ClCl.XHEa ClCl.PSCHa ClCl.IHEa ClCl.PBEa ClCl.FHLCa
-    ## 2018-02-09  20200.97    20262.4  20223.25  20111.02   20274.88
+    ## 2020-12-14   19946.4   20075.87  19944.82  20782.73   19915.67
 
-    ## [1] 101072.5
+    ## [1] 100665.5
 
 So as we can see on a random day we went from $100,000 in capital to
 output\[1\].
 
 We then observed the change over a time period of two weeks.
 
-    ## [1] 97318.17
+    ## [1] 95815.05
 
 ![](Solutions_files/figure-markdown_github/5s-1.png)
 
@@ -678,41 +679,41 @@ So we can see the change in our capital over the time of 20 days.
 
 So now we bootstrap this model.
 
-    ##               [,1]      [,2]     [,3]      [,4]     [,5]      [,6]      [,7]
-    ## result.1 100308.84 100232.35 100247.1  99510.29  99607.9  99839.79 100055.62
-    ## result.2 100807.96 100465.35 100124.5 100111.94 100126.1 100671.27 100388.47
-    ## result.3  99486.52 100806.16 101154.0 101802.58 101752.4 100139.85 100737.51
-    ## result.4  99458.88  99518.47 100809.3 101343.25  97787.1  96638.45  97111.94
-    ## result.5  99643.44 100532.66 100696.4 100382.91 101522.4 100202.35  98574.88
-    ## result.6 100131.97 101439.11 101494.2 100487.44 100545.6 102565.05 103668.56
-    ##               [,8]     [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
-    ## result.1 100522.28 101437.7 101460.18 102592.91 102552.56 101035.22 101364.38
-    ## result.2 102937.87 102428.0 103475.25 103261.23 104246.13 104225.26 104745.68
-    ## result.3 101486.83 101755.6 102073.11 102171.39 101863.26  99918.41 100341.58
-    ## result.4  94527.26  95637.7  95885.57  95602.74  95778.32  97051.05  97628.77
-    ## result.5  98256.98  97285.1  99495.85 102202.96 103401.38 103360.51 103980.25
-    ## result.6 105067.21 105786.6 106036.00 107731.99 108000.35 107538.00 106982.87
-    ##              [,15]     [,16]     [,17]     [,18]    [,19]    [,20]
-    ## result.1 101037.01  99143.20  98755.31  95862.34  97448.5 100899.1
-    ## result.2 104000.65 101998.63 102216.52 102396.01 102454.1 103019.8
-    ## result.3 100907.28 100164.52 100303.88 101552.86 101924.2 103350.1
-    ## result.4  97526.21  99207.24  99221.29 100499.18 100519.6 101652.3
-    ## result.5 103844.70 105650.49 104466.14 102610.93 103360.1 103213.2
-    ## result.6 107169.60 107918.45 109186.69 108268.64 109262.1 107573.7
+    ##               [,1]      [,2]      [,3]      [,4]      [,5]      [,6]     [,7]
+    ## result.1  99784.78  99701.53  97951.02  96396.57  98336.98  98292.94  98209.0
+    ## result.2 101681.39 102744.80 101458.22 101172.82 102354.47 102944.76 102269.2
+    ## result.3  99382.43  98819.28  96071.35  96139.02  94187.02  93808.13  92933.2
+    ## result.4 100412.85  99250.03 100006.60  99879.09 100732.75 101009.70 101538.4
+    ## result.5 100893.95 101334.67 102253.51 102558.24 102757.33 104525.91 105640.4
+    ## result.6 100272.54  99800.92  99457.47 100020.67  99622.18 100549.34 101486.3
+    ##               [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]
+    ## result.1  93430.89  93377.33  91494.99  91957.36  92923.77  93830.43  91980.93
+    ## result.2 103159.32 104161.15 100785.13 102125.05 100947.68 103757.74 104489.36
+    ## result.3  93469.53  93947.69  93967.46  96211.30  95720.60  97038.71  94603.70
+    ## result.4 101804.52 103130.63 102907.41 102508.10 103800.16 102570.31 102490.36
+    ## result.5 106422.55 109015.08 110213.55 110600.99 109471.41 105584.49 107494.18
+    ## result.6 102974.68 105920.38 106112.22 107125.81 104554.63 104052.66 104918.10
+    ##              [,15]     [,16]     [,17]     [,18]     [,19]     [,20]
+    ## result.1  91950.66  91172.50  90577.32  90541.81  88110.92  88051.87
+    ## result.2 101585.14 103176.53 103724.22 103896.96 103932.84 103946.20
+    ## result.3  93689.53  93002.84  93252.66  92908.84  94550.16  94461.67
+    ## result.4 100025.99 100821.89 100282.76 102904.82 102646.30 105715.94
+    ## result.5 107130.03 107776.49 107942.54 107269.03 105436.38 103735.95
+    ## result.6 104486.97 105273.45 104600.72 104760.15 105311.15 104170.24
 
 ![](Solutions_files/figure-markdown_github/5t-1.png)
 
 So we can see the distribution of capital after bootstrapping. It is
 mostly normal.
 
-    ## [1] 101060.8
+    ## [1] 100688.2
 
-    ## [1] 1060.779
+    ## [1] 688.1599
 
 ![](Solutions_files/figure-markdown_github/5u-1.png)
 
     ##        5% 
-    ## -9138.233
+    ## -9134.328
 
 So our ultimate gain/loss would be output \[1\]. However, this could
 change due to randomization in bootstrapping.
@@ -2783,9 +2784,9 @@ grocery_rules = apriori(grocery_trans, parameter=list(support=.01, confidence=.5
     ## Absolute minimum support count: 98 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.00s].
+    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [88 item(s)] done [0.00s].
-    ## creating transaction tree ... done [0.00s].
+    ## creating transaction tree ... done [0.01s].
     ## checking subsets of size 1 2 3 4
 
     ## Warning in apriori(grocery_trans, parameter = list(support = 0.01, confidence
@@ -2877,7 +2878,7 @@ grocery_rules= apriori(grocery_trans, parameter=list(support=.005, confidence=.5
     ## Absolute minimum support count: 49 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.00s].
+    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [120 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4
@@ -2886,7 +2887,7 @@ grocery_rules= apriori(grocery_trans, parameter=list(support=.005, confidence=.5
     ## = 0.5, : Mining stopped (maxlen reached). Only patterns up to a length of 4
     ## returned!
 
-    ##  done [0.00s].
+    ##  done [0.01s].
     ## writing ... [120 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -3188,7 +3189,7 @@ grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.
     ## Absolute minimum support count: 19 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.00s].
+    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [147 item(s)] done [0.00s].
     ## creating transaction tree ... done [0.00s].
     ## checking subsets of size 1 2 3 4
@@ -3197,7 +3198,7 @@ grocery_rules = apriori(grocery_trans, parameter=list(support=.002, confidence=.
     ## = 0.8, : Mining stopped (maxlen reached). Only patterns up to a length of 4
     ## returned!
 
-    ##  done [0.00s].
+    ##  done [0.01s].
     ## writing ... [6 rule(s)] done [0.00s].
     ## creating S4 object  ... done [0.00s].
 
@@ -3245,9 +3246,9 @@ grocery_rules <- apriori(grocery_trans, parameter=list(support=.0015,
     ## Absolute minimum support count: 14 
     ## 
     ## set item appearances ...[0 item(s)] done [0.00s].
-    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.00s].
+    ## set transactions ...[169 item(s), 9835 transaction(s)] done [0.01s].
     ## sorting and recoding items ... [153 item(s)] done [0.00s].
-    ## creating transaction tree ... done [0.00s].
+    ## creating transaction tree ... done [0.01s].
     ## checking subsets of size 1 2 3 4 5
 
     ## Warning in apriori(grocery_trans, parameter = list(support = 0.0015, confidence
