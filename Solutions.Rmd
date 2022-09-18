@@ -31,19 +31,19 @@ Visitors to your website are asked to answer a single survey question before the
 > To find the fraction of people truthful clickers who answered yes, we find the value of $P(Y|T_{c})$
 >
 > We know that, <br>
->   $P(Y) = P(Y|R_{c}) + P(Y|T_{c})$
+>   $P(Y) = P(Y|R_{c}).P(R_{c}) + P(Y|T_{c}).P(T_{c})$
 >
 > Rearranging, <br>
->   $P(Y|T_{c}) = P(Y) - P(Y|R_{c})$
+>   $P(Y|T_{c}) = \frac{ P(Y) - P(Y|R_{c}).P(R_{c}) }{P(T_{c})}$
 >
 > If a random clicker clicking *Yes* or *No* is equally likely, then the probability (or fraction) of Random clickers, clicking yes > is (Fraction of users among the 0.3 random clickers, clicking *Yes*), <br>
->   $P(Y|R_{c}) = 0.5*0.3 = 0.15$
+>   $P(Y|R_{c}).P(R_{c}) = P(Y \cap R_{c}) = 0.5*0.3 = 0.15$
 >
 > Substituting in the rearranged equation, <br>
->   $P(Y|T_{c}) = 0.65 - 0.15$ <br>
->   $P(Y|T_{c}) = 0.5$
+>   $P(Y|T_{c}) = \frac{0.65 - 0.15}{0.7}$ <br>
+>   $P(Y|T_{c}) = 0.7143$
 >
-> Therefore, the fraction of clickers among truthful clickers who clicked yes would be **0.5**
+> Therefore, the fraction of clickers among truthful clickers who clicked yes would be **0.7143**
 
 ## Part. B
 Imagine a medical test for a disease with the following two attributes:
